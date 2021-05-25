@@ -1429,36 +1429,36 @@ exports.Parser = Parser;
 },{"./LanguageUtils":34,"entities":5,"paperback-extensions-common":12}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ManhwaX = exports.ManhwaXInfo = void 0;
+exports.RawKuma = exports.RawKumaInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
-const MANHWAX_DOMAIN = "https://manhwax.com";
-exports.ManhwaXInfo = {
+const RAWKUMA_DOMAIN = "https://rawkuma.com";
+exports.RawKumaInfo = {
     version: '1.0.1',
-    name: 'ManhwaX',
-    description: 'Extension that pulls manga from ManhwaX',
+    name: 'RawKuma',
+    description: 'Extension that pulls manga from RawKuma',
     author: 'Netsky',
     authorWebsite: 'http://github.com/TheNetsky',
     icon: "icon.png",
     hentaiSource: false,
-    websiteBaseURL: MANHWAX_DOMAIN,
+    websiteBaseURL: RAWKUMA_DOMAIN,
     sourceTags: [
         {
             text: "Notifications",
             type: paperback_extensions_common_1.TagType.GREEN
         },
         {
-            text: "18+",
-            type: paperback_extensions_common_1.TagType.YELLOW
+            text: "Japanese",
+            type: paperback_extensions_common_1.TagType.GREY
         }
     ]
 };
-class ManhwaX extends MangaStream_1.MangaStream {
+class RawKuma extends MangaStream_1.MangaStream {
     constructor() {
         //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
         super(...arguments);
-        this.baseUrl = MANHWAX_DOMAIN;
-        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
+        this.baseUrl = RAWKUMA_DOMAIN;
+        this.languageCode = paperback_extensions_common_1.LanguageCode.JAPANESE;
         this.hasAdvancedSearchPage = true;
         //----MANGA DETAILS SELECTORS
         /*
@@ -1473,9 +1473,9 @@ class ManhwaX extends MangaStream_1.MangaStream {
         //----HOMESCREEN SELECTORS
         //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
         //Always be sure to test this in the app!
-        this.homescreen_PopularToday_enabled = false;
+        this.homescreen_PopularToday_enabled = true;
         this.homescreen_LatestUpdate_enabled = true;
-        this.homescreen_NewManga_enabled = false;
+        this.homescreen_NewManga_enabled = true;
         this.homescreen_TopAllTime_enabled = true;
         this.homescreen_TopMonthly_enabled = true;
         this.homescreen_TopWeekly_enabled = true;
@@ -1493,13 +1493,9 @@ class ManhwaX extends MangaStream_1.MangaStream {
         tags_selector_item: string = "li"
         tags_selector_label: string = "span"
         */
-        this.tags_SubdirectoryPathName = "";
-        this.tags_selector_box = "ul.genre";
-        this.tags_selector_item = "li";
-        this.tags_selector_label = "";
     }
 }
-exports.ManhwaX = ManhwaX;
+exports.RawKuma = RawKuma;
 
 },{"../MangaStream":35,"paperback-extensions-common":12}]},{},[37])(37)
 });

@@ -622,6 +622,74 @@ __exportStar(require("./UserForm"), exports);
 },{"./Chapter":13,"./ChapterDetails":14,"./Constants":15,"./HomeSection":16,"./Languages":17,"./Manga":18,"./MangaTile":19,"./MangaUpdate":20,"./OAuth":21,"./PagedResults":22,"./RequestHeaders":23,"./RequestManager":24,"./RequestObject":25,"./ResponseObject":26,"./SearchRequest":27,"./SourceInfo":28,"./SourceTag":29,"./TagSection":30,"./TrackObject":31,"./UserForm":32}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FlameScans = exports.FlameScansInfo = void 0;
+const paperback_extensions_common_1 = require("paperback-extensions-common");
+const MangaStream_1 = require("../MangaStream");
+const FLAMESCANS_DOMAIN = "https://flamescans.org";
+exports.FlameScansInfo = {
+    version: '1.0.1',
+    name: 'FlameScans',
+    description: 'Extension that pulls manga from FlameScans',
+    author: 'Netsky',
+    authorWebsite: 'http://github.com/TheNetsky',
+    icon: "icon.png",
+    hentaiSource: false,
+    websiteBaseURL: FLAMESCANS_DOMAIN,
+    sourceTags: [
+        {
+            text: "Notifications",
+            type: paperback_extensions_common_1.TagType.GREEN
+        }
+    ]
+};
+class FlameScans extends MangaStream_1.MangaStream {
+    constructor() {
+        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
+        super(...arguments);
+        this.baseUrl = FLAMESCANS_DOMAIN;
+        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
+        this.hasAdvancedSearchPage = true;
+        this.sourceTraversalPathName = 'series';
+        //----MANGA DETAILS SELECTORS
+        /*
+        If a website uses different names/words for the status below, change them to these.
+        These must also be changed id a different language is used!
+        Don't worry, these are case insensitive.
+        */
+        //manga_StatusTypes: object = { 
+        //    ONGOING: "ongoing",
+        //    COMPLETED: "completed"
+        //}
+        //----HOMESCREEN SELECTORS
+        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
+        //Always be sure to test this in the app!
+        this.homescreen_PopularToday_enabled = true;
+        this.homescreen_LatestUpdate_enabled = true;
+        this.homescreen_NewManga_enabled = false;
+        this.homescreen_TopAllTime_enabled = true;
+        this.homescreen_TopMonthly_enabled = true;
+        this.homescreen_TopWeekly_enabled = true;
+        /*
+        ----TAG SELECTORS
+        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
+        tags_SubdirectoryPathName: string = ""
+        tags_selector_box: string = "ul.genre"
+        tags_selector_item: string = "li"
+        tags_selector_label: string = ""
+    
+        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
+        tags_SubdirectoryPathName: string = "/genres/"
+        tags_selector_box: string = "ul.genre"
+        tags_selector_item: string = "li"
+        tags_selector_label: string = "span"
+        */
+    }
+}
+exports.FlameScans = FlameScans;
+
+},{"../MangaStream":36,"paperback-extensions-common":12}],35:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertDateAgo = exports.convertDate = void 0;
 function convertDate(rawDate, source) {
     const dateString = rawDate.toLowerCase();
@@ -699,7 +767,7 @@ function convertDateAgo(date, source) {
 }
 exports.convertDateAgo = convertDateAgo;
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1071,7 +1139,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
 }
 exports.MangaStream = MangaStream;
 
-},{"./MangaStreamParser":36,"paperback-extensions-common":12}],36:[function(require,module,exports){
+},{"./MangaStreamParser":37,"paperback-extensions-common":12}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Parser = void 0;
@@ -1426,80 +1494,5 @@ class Parser {
 }
 exports.Parser = Parser;
 
-},{"./LanguageUtils":34,"entities":5,"paperback-extensions-common":12}],37:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ManhwaX = exports.ManhwaXInfo = void 0;
-const paperback_extensions_common_1 = require("paperback-extensions-common");
-const MangaStream_1 = require("../MangaStream");
-const MANHWAX_DOMAIN = "https://manhwax.com";
-exports.ManhwaXInfo = {
-    version: '1.0.1',
-    name: 'ManhwaX',
-    description: 'Extension that pulls manga from ManhwaX',
-    author: 'Netsky',
-    authorWebsite: 'http://github.com/TheNetsky',
-    icon: "icon.png",
-    hentaiSource: false,
-    websiteBaseURL: MANHWAX_DOMAIN,
-    sourceTags: [
-        {
-            text: "Notifications",
-            type: paperback_extensions_common_1.TagType.GREEN
-        },
-        {
-            text: "18+",
-            type: paperback_extensions_common_1.TagType.YELLOW
-        }
-    ]
-};
-class ManhwaX extends MangaStream_1.MangaStream {
-    constructor() {
-        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
-        super(...arguments);
-        this.baseUrl = MANHWAX_DOMAIN;
-        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
-        this.hasAdvancedSearchPage = true;
-        //----MANGA DETAILS SELECTORS
-        /*
-        If a website uses different names/words for the status below, change them to these.
-        These must also be changed id a different language is used!
-        Don't worry, these are case insensitive.
-        */
-        //manga_StatusTypes: object = { 
-        //    ONGOING: "ongoing",
-        //    COMPLETED: "completed"
-        //}
-        //----HOMESCREEN SELECTORS
-        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
-        //Always be sure to test this in the app!
-        this.homescreen_PopularToday_enabled = false;
-        this.homescreen_LatestUpdate_enabled = true;
-        this.homescreen_NewManga_enabled = false;
-        this.homescreen_TopAllTime_enabled = true;
-        this.homescreen_TopMonthly_enabled = true;
-        this.homescreen_TopWeekly_enabled = true;
-        /*
-        ----TAG SELECTORS
-        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
-        tags_SubdirectoryPathName: string = ""
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = ""
-    
-        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
-        tags_SubdirectoryPathName: string = "/genres/"
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = "span"
-        */
-        this.tags_SubdirectoryPathName = "";
-        this.tags_selector_box = "ul.genre";
-        this.tags_selector_item = "li";
-        this.tags_selector_label = "";
-    }
-}
-exports.ManhwaX = ManhwaX;
-
-},{"../MangaStream":35,"paperback-extensions-common":12}]},{},[37])(37)
+},{"./LanguageUtils":35,"entities":5,"paperback-extensions-common":12}]},{},[34])(34)
 });

@@ -1429,35 +1429,31 @@ exports.Parser = Parser;
 },{"./LanguageUtils":34,"entities":5,"paperback-extensions-common":12}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ManhwaX = exports.ManhwaXInfo = void 0;
+exports.ReadKomik = exports.ReadKomikInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
-const MANHWAX_DOMAIN = "https://manhwax.com";
-exports.ManhwaXInfo = {
+const READKOMIK_DOMAIN = "https://readkomik.com";
+exports.ReadKomikInfo = {
     version: '1.0.1',
-    name: 'ManhwaX',
-    description: 'Extension that pulls manga from ManhwaX',
+    name: 'ReadKomik',
+    description: 'Extension that pulls manga from ReadKomik',
     author: 'Netsky',
     authorWebsite: 'http://github.com/TheNetsky',
     icon: "icon.png",
     hentaiSource: false,
-    websiteBaseURL: MANHWAX_DOMAIN,
+    websiteBaseURL: READKOMIK_DOMAIN,
     sourceTags: [
         {
             text: "Notifications",
             type: paperback_extensions_common_1.TagType.GREEN
-        },
-        {
-            text: "18+",
-            type: paperback_extensions_common_1.TagType.YELLOW
         }
     ]
 };
-class ManhwaX extends MangaStream_1.MangaStream {
+class ReadKomik extends MangaStream_1.MangaStream {
     constructor() {
         //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
         super(...arguments);
-        this.baseUrl = MANHWAX_DOMAIN;
+        this.baseUrl = READKOMIK_DOMAIN;
         this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
         this.hasAdvancedSearchPage = true;
         //----MANGA DETAILS SELECTORS
@@ -1471,9 +1467,8 @@ class ManhwaX extends MangaStream_1.MangaStream {
         //    COMPLETED: "completed"
         //}
         //----HOMESCREEN SELECTORS
-        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
-        //Always be sure to test this in the app!
-        this.homescreen_PopularToday_enabled = false;
+        //Disabling some of these will cause some Home-Page tests to fail, be sure to test this in the app!
+        this.homescreen_PopularToday_enabled = true;
         this.homescreen_LatestUpdate_enabled = true;
         this.homescreen_NewManga_enabled = false;
         this.homescreen_TopAllTime_enabled = true;
@@ -1499,7 +1494,7 @@ class ManhwaX extends MangaStream_1.MangaStream {
         this.tags_selector_label = "";
     }
 }
-exports.ManhwaX = ManhwaX;
+exports.ReadKomik = ReadKomik;
 
 },{"../MangaStream":35,"paperback-extensions-common":12}]},{},[37])(37)
 });
