@@ -1,5 +1,5 @@
 
-# MangaStream Index
+# MangaStream Repo Index
 [Github Repo](https://github.com/TheNetsky/extensions-mangastream)
 
 ## Current Repo
