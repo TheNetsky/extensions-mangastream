@@ -1,5 +1,5 @@
 
-# Index
+# MangaStream Index
 
 ## Current Repo
 
