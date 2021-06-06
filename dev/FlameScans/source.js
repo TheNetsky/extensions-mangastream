@@ -883,7 +883,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
          * This box contains all the chapter items
          * Default = "div#chapterlist.eplister"
         */
-        this.chapter_selector_box = "div#chapterlist.eplister";
+        this.chapter_selector_box = "div#chapterlist";
         /**
          * The selector for each individual chapter element
          * This is the element for each small box containing the chapter information
@@ -948,6 +948,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}`,
                 method: 'GET',
+                headers: this.constructHeaders({})
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -958,8 +959,9 @@ class MangaStream extends paperback_extensions_common_1.Source {
     getChapters(mangaId) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
-                url: `${this.baseUrl}/${mangaId}`,
+                url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}`,
                 method: 'GET',
+                headers: this.constructHeaders({})
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -972,6 +974,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${chapterId}`,
                 method: 'GET',
+                headers: this.constructHeaders({}),
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1105,32 +1108,31 @@ class MangaStream extends paperback_extensions_common_1.Source {
         return createRequestObject({
             url: this.baseUrl,
             method: 'GET',
+            headers: this.constructHeaders({})
         });
     }
-    /*
-        constructHeaders(headers: any, refererPath?: string): any {
-            if (this.userAgentRandomizer !== '') {
-                headers["user-agent"] = this.userAgentRandomizer;
-            }
-            headers["referer"] = `${this.baseUrl}${refererPath ?? ''}`;
-            return headers;
+    constructHeaders(headers, refererPath) {
+        if (this.userAgentRandomizer !== '') {
+            headers["user-agent"] = this.userAgentRandomizer;
         }
-    
-        globalRequestHeaders(): RequestHeaders {
-            if (this.userAgentRandomizer !== '') {
-                return {
-                    "referer": `${this.baseUrl}/`,
-                    "user-agent": this.userAgentRandomizer,
-                    "accept": "image/jpeg,image/png,image/*;q=0.8"
-                }
-            } else {
-                return {
-                    "referer": `${this.baseUrl}/`,
-                    "accept": "image/jpeg,image/png,image/*;q=0.8"
-                }
-            }
+        headers["referer"] = `${this.baseUrl}${refererPath !== null && refererPath !== void 0 ? refererPath : ''}`;
+        return headers;
+    }
+    globalRequestHeaders() {
+        if (this.userAgentRandomizer !== '') {
+            return {
+                "referer": `${this.baseUrl}/`,
+                "user-agent": this.userAgentRandomizer,
+                "accept": "image/jpeg,image/png,image/*;q=0.8"
+            };
         }
-    */
+        else {
+            return {
+                "referer": `${this.baseUrl}/`,
+                "accept": "image/jpeg,image/png,image/*;q=0.8"
+            };
+        }
+    }
     CloudFlareError(status) {
         if (status == 503) {
             throw new Error('CLOUDFLARE BYPASS ERROR:\nPlease go to Settings > Sources > \<\The name of this source\> and press Cloudflare Bypass');
@@ -1484,8 +1486,8 @@ class Parser {
     getImageSrc(imageObj) {
         var _a, _b, _c;
         let image;
-        if (typeof (imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('data-src')) != 'undefined') {
-            image = imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('data-src');
+        if (typeof (imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('src')) != 'undefined') {
+            image = imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('src');
         }
         else if (typeof (imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('data-lazy-src')) != 'undefined') {
             image = imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('data-lazy-src');
@@ -1494,7 +1496,7 @@ class Parser {
             image = (_b = (_a = imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('srcset')) === null || _a === void 0 ? void 0 : _a.split(' ')[0]) !== null && _b !== void 0 ? _b : '';
         }
         else {
-            image = imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('src');
+            image = imageObj === null || imageObj === void 0 ? void 0 : imageObj.attr('data-src');
         }
         return encodeURI(decodeURI(this.decodeHTMLEntity((_c = image === null || image === void 0 ? void 0 : image.trim()) !== null && _c !== void 0 ? _c : '')));
     }
