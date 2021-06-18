@@ -980,12 +980,12 @@ class MangaStream extends paperback_extensions_common_1.Source {
         this.parser = new MangaStreamParser_1.Parser();
     }
     getMangaShareUrl(mangaId) {
-        return `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}`;
+        return `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`;
     }
     getMangaDetails(mangaId) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
-                url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}`,
+                url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
                 method: 'GET',
                 headers: this.constructHeaders({})
             });
@@ -998,7 +998,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
     getChapters(mangaId) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
-                url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}`,
+                url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
                 method: 'GET',
                 headers: this.constructHeaders({})
             });
@@ -1011,7 +1011,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
     getChapterDetails(mangaId, chapterId) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
-                url: `${this.baseUrl}/${chapterId}`,
+                url: `${this.baseUrl}/${chapterId}/`,
                 method: 'GET',
                 headers: this.constructHeaders({}),
             });
@@ -1023,7 +1023,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
     getTags() {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
-                url: this.baseUrl,
+                url: `${this.baseUrl}/`,
                 method: "GET",
                 param: this.tags_SubdirectoryPathName
             });
@@ -1100,7 +1100,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             if (this.homescreen_TopWeekly_enabled)
                 sections.push(section6);
             const request = createRequestObject({
-                url: this.baseUrl,
+                url: `${this.baseUrl}/`,
                 method: "GET",
             });
             const response = yield this.requestManager.schedule(request, 1);
@@ -1129,7 +1129,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
                     ;
             }
             const request = createRequestObject({
-                url: this.baseUrl,
+                url: `${this.baseUrl}/`,
                 method: "GET",
                 param,
             });
@@ -1145,7 +1145,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
     }
     getCloudflareBypassRequest() {
         return createRequestObject({
-            url: this.baseUrl,
+            url: `${this.baseUrl}/`,
             method: 'GET',
             headers: this.constructHeaders({})
         });
@@ -1207,7 +1207,7 @@ class Parser {
                     continue;
                 mangas.push(createMangaTile({
                     id,
-                    image: !image ? source.fallbackImage : image,
+                    image: image ? image : source.fallbackImage,
                     title: createIconText({ text: this.decodeHTMLEntity(title) }),
                     subtitleText: createIconText({ text: subtitle }),
                 }));
@@ -1269,7 +1269,7 @@ class Parser {
         return createManga({
             id: mangaId,
             titles: titles,
-            image: !image ? source.fallbackImage : image,
+            image: image ? image : source.fallbackImage,
             rating: 0,
             status: status,
             author: author == "" ? "Unknown" : author,
@@ -1356,7 +1356,7 @@ class Parser {
                 continue;
             mangas.push(createMangaTile({
                 id,
-                image: !image ? source.fallbackImage : image,
+                image: image ? image : source.fallbackImage,
                 title: createIconText({ text: this.decodeHTMLEntity(title) }),
                 subtitleText: createIconText({ text: subtitle }),
             }));
@@ -1416,7 +1416,7 @@ class Parser {
                         continue;
                     popularToday.push(createMangaTile({
                         id: id,
-                        image: !image ? source.fallbackImage : image,
+                        image: image ? image : source.fallbackImage,
                         title: createIconText({ text: this.decodeHTMLEntity(title) }),
                         subtitleText: createIconText({ text: subtitle }),
                     }));
@@ -1438,7 +1438,7 @@ class Parser {
                         continue;
                     latestUpdate.push(createMangaTile({
                         id: id,
-                        image: !image ? source.fallbackImage : image,
+                        image: image ? image : source.fallbackImage,
                         title: createIconText({ text: this.decodeHTMLEntity(title) }),
                         subtitleText: createIconText({ text: subtitle }),
                     }));
@@ -1459,7 +1459,7 @@ class Parser {
                         continue;
                     NewTitles.push(createMangaTile({
                         id: id,
-                        image: !image ? source.fallbackImage : image,
+                        image: image ? image : source.fallbackImage,
                         title: createIconText({ text: this.decodeHTMLEntity(title) }),
                     }));
                 }
@@ -1477,7 +1477,7 @@ class Parser {
                         continue;
                     TopAllTime.push(createMangaTile({
                         id: id,
-                        image: !image ? source.fallbackImage : image,
+                        image: image ? image : source.fallbackImage,
                         title: createIconText({ text: this.decodeHTMLEntity(title) }),
                     }));
                 }
@@ -1495,7 +1495,7 @@ class Parser {
                         continue;
                     TopMonthly.push(createMangaTile({
                         id: id,
-                        image: !image ? source.fallbackImage : image,
+                        image: image ? image : source.fallbackImage,
                         title: createIconText({ text: this.decodeHTMLEntity(title) }),
                     }));
                 }
@@ -1513,7 +1513,7 @@ class Parser {
                         continue;
                     TopWeekly.push(createMangaTile({
                         id: id,
-                        image: !image ? source.fallbackImage : image,
+                        image: image ? image : source.fallbackImage,
                         title: createIconText({ text: this.decodeHTMLEntity(title) }),
                     }));
                 }
