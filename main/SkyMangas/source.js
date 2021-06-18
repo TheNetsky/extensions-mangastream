@@ -703,78 +703,6 @@ exports.convertDateAgo = convertDateAgo;
 
 },{}],35:[function(require,module,exports){
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MangaGenki = exports.MangaGenkiInfo = void 0;
-const paperback_extensions_common_1 = require("paperback-extensions-common");
-const MangaStream_1 = require("../MangaStream");
-const MANGAGENKI_DOMAIN = "https://mangagenki.com";
-exports.MangaGenkiInfo = {
-    version: '1.0.1',
-    name: 'MangaGenki',
-    description: 'Extension that pulls manga from MangaGenki',
-    author: 'Netsky',
-    authorWebsite: 'http://github.com/TheNetsky',
-    icon: "icon.png",
-    hentaiSource: false,
-    websiteBaseURL: MANGAGENKI_DOMAIN,
-    sourceTags: [
-        {
-            text: "Notifications",
-            type: paperback_extensions_common_1.TagType.GREEN
-        },
-        {
-            text: "18+",
-            type: paperback_extensions_common_1.TagType.YELLOW
-        }
-    ]
-};
-class MangaGenki extends MangaStream_1.MangaStream {
-    constructor() {
-        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
-        super(...arguments);
-        this.baseUrl = MANGAGENKI_DOMAIN;
-        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
-        this.hasAdvancedSearchPage = true;
-        //----MANGA DETAILS SELECTORS
-        /*
-        If a website uses different names/words for the status below, change them to these.
-        These must also be changed id a different language is used!
-        Don't worry, these are case insensitive.
-        */
-        //manga_StatusTypes: object = { 
-        //    ONGOING: "ongoing",
-        //    COMPLETED: "completed"
-        //}
-        //----HOMESCREEN SELECTORS
-        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
-        //Always be sure to test this in the app!
-        this.homescreen_PopularToday_enabled = true;
-        this.homescreen_LatestUpdate_enabled = true;
-        this.homescreen_NewManga_enabled = true;
-        this.homescreen_NewManga_selector = "h3:contains(New Titles)";
-        this.homescreen_TopAllTime_enabled = true;
-        this.homescreen_TopMonthly_enabled = true;
-        this.homescreen_TopWeekly_enabled = true;
-        /*
-        ----TAG SELECTORS
-        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
-        tags_SubdirectoryPathName: string = ""
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = ""
-    
-        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
-        tags_SubdirectoryPathName: string = "/genres/"
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = "span"
-        */
-    }
-}
-exports.MangaGenki = MangaGenki;
-
-},{"../MangaStream":36,"paperback-extensions-common":12}],36:[function(require,module,exports){
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1147,7 +1075,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
 }
 exports.MangaStream = MangaStream;
 
-},{"./MangaStreamParser":37,"paperback-extensions-common":12}],37:[function(require,module,exports){
+},{"./MangaStreamParser":36,"paperback-extensions-common":12}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Parser = void 0;
@@ -1520,5 +1448,113 @@ class Parser {
 }
 exports.Parser = Parser;
 
-},{"./LanguageUtils":34,"entities":5,"paperback-extensions-common":12}]},{},[35])(35)
+},{"./LanguageUtils":34,"entities":5,"paperback-extensions-common":12}],37:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SkyMangas = exports.SkyMangasInfo = void 0;
+const paperback_extensions_common_1 = require("paperback-extensions-common");
+const MangaStream_1 = require("../MangaStream");
+const SKYMANGAS_DOMAIN = "http://skymangas.com";
+exports.SkyMangasInfo = {
+    version: '1.0.0',
+    name: 'SkyMangas',
+    description: 'Extension that pulls manga from SkyMangas',
+    author: 'Netsky',
+    authorWebsite: 'http://github.com/TheNetsky',
+    icon: "icon.png",
+    hentaiSource: false,
+    websiteBaseURL: SKYMANGAS_DOMAIN,
+    sourceTags: [
+        {
+            text: "Notifications",
+            type: paperback_extensions_common_1.TagType.GREEN
+        },
+        {
+            text: "Spanish",
+            type: paperback_extensions_common_1.TagType.GREY
+        }
+    ]
+};
+class SkyMangas extends MangaStream_1.MangaStream {
+    constructor() {
+        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
+        super(...arguments);
+        this.baseUrl = SKYMANGAS_DOMAIN;
+        this.languageCode = paperback_extensions_common_1.LanguageCode.FRENCH;
+        this.hasAdvancedSearchPage = true;
+        //----DATE SETTINGS
+        this.dateMonths = {
+            january: "enero",
+            february: "febrero",
+            march: "marzo",
+            april: "abril",
+            may: "mayo",
+            june: "junio",
+            july: "julio",
+            august: "agosto",
+            september: "septiembre",
+            october: "octubre",
+            november: "noviembre",
+            december: "diciembre"
+        };
+        this.dateTimeAgo = {
+            now: ["less than an hour", "just now"],
+            yesterday: ["ayer"],
+            years: ["año", "ano"],
+            months: ["mes", "meses"],
+            weeks: ["semana", "semanas"],
+            days: ["día", "dia", "dias"],
+            hours: ["hora"],
+            minutes: ["minutre"],
+            seconds: ["segundo"]
+        };
+        //----MANGA DETAILS SELECTORS
+        this.manga_selector_author = "Autor";
+        this.manga_selector_artist = "Artista";
+        this.manga_selector_status = "Estado";
+        /*
+        If a website uses different names/words for the status below, change them to these.
+        These must also be changed if a different language is used!
+        Don't worry, these are case insensitive.
+        */
+        /*
+            manga_StatusTypes = {
+                ONGOING: "En cours",
+                COMPLETED: "Terminée"
+            }
+        */
+        //----HOMESCREEN SELECTORS
+        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
+        //Always be sure to test this in the app!
+        this.homescreen_PopularToday_enabled = true;
+        this.homescreen_PopularToday_selector = "h2:contains(Popular Hoy)";
+        this.homescreen_LatestUpdate_enabled = true;
+        this.homescreen_LatestUpdate_selector_box = "h2:contains(Actualizaciones)";
+        this.homescreen_NewManga_enabled = false;
+        this.homescreen_TopAllTime_enabled = true;
+        this.homescreen_TopMonthly_enabled = true;
+        this.homescreen_TopWeekly_enabled = true;
+        /*
+        ----TAG SELECTORS
+        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
+        tags_SubdirectoryPathName: string = ""
+        tags_selector_box: string = "ul.genre"
+        tags_selector_item: string = "li"
+        tags_selector_label: string = ""
+    
+        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
+        tags_SubdirectoryPathName: string = "/genres/"
+        tags_selector_box: string = "ul.genre"
+        tags_selector_item: string = "li"
+        tags_selector_label: string = "span"
+        */
+        this.tags_SubdirectoryPathName = "";
+        this.tags_selector_box = "ul.genre";
+        this.tags_selector_item = "li";
+        this.tags_selector_label = "";
+    }
+}
+exports.SkyMangas = SkyMangas;
+
+},{"../MangaStream":35,"paperback-extensions-common":12}]},{},[37])(37)
 });
