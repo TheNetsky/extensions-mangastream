@@ -872,7 +872,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             requestsPerSecond: 2.5,
             requestTimeout: 15000,
         });
-        this.parser = new MangaStreamParser_1.Parser();
+        this.parser = new MangaStreamParser_1.MangaStreamParser();
     }
     getMangaShareUrl(mangaId) {
         return `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`;
@@ -1078,11 +1078,11 @@ exports.MangaStream = MangaStream;
 },{"./MangaStreamParser":36,"paperback-extensions-common":12}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Parser = void 0;
+exports.MangaStreamParser = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const LanguageUtils_1 = require("./LanguageUtils");
 const entities = require("entities");
-class Parser {
+class MangaStreamParser {
     constructor() {
         this.generateSearch = (query) => {
             var _a;
@@ -1265,7 +1265,7 @@ class Parser {
         let loadMore = true;
         const isLast = this.isLastPage($, "view_more"); //Check if it's the last page or not, needed for some sites!
         if (!$(source.homescreen_LatestUpdate_selector_item, (_b = (_a = $(source.homescreen_LatestUpdate_selector_box)) === null || _a === void 0 ? void 0 : _a.parent()) === null || _b === void 0 ? void 0 : _b.next()).length)
-            throw new Error("Unable to parse valid update sectiond!");
+            throw new Error("Unable to parse valid update section!");
         for (const manga of $(source.homescreen_LatestUpdate_selector_item, $(source.homescreen_LatestUpdate_selector_box).parent().next()).toArray()) {
             const id = this.idCleaner((_c = $("a", manga).attr('href')) !== null && _c !== void 0 ? _c : "", source);
             const mangaDate = LanguageUtils_1.convertDateAgo($("li > span", $("div.luf", manga)).first().text().trim(), source);
@@ -1300,8 +1300,10 @@ class Parser {
             //Popular Today
             if (section.id == "popular_today") {
                 const popularToday = [];
-                if (!$("div.bsx", (_b = (_a = $(source.homescreen_PopularToday_selector)) === null || _a === void 0 ? void 0 : _a.parent()) === null || _b === void 0 ? void 0 : _b.next()).length)
-                    throw new Error("Unable to parse valid Popular Today section!");
+                if (!$("div.bsx", (_b = (_a = $(source.homescreen_PopularToday_selector)) === null || _a === void 0 ? void 0 : _a.parent()) === null || _b === void 0 ? void 0 : _b.next()).length) {
+                    console.log("Unable to parse valid Popular Today section!");
+                    continue;
+                }
                 for (const manga of $("div.bsx", $(source.homescreen_PopularToday_selector).parent().next()).toArray()) {
                     const id = this.idCleaner((_c = $("a", manga).attr('href')) !== null && _c !== void 0 ? _c : "", source);
                     const title = $("a", manga).attr('title');
@@ -1322,8 +1324,10 @@ class Parser {
             //Latest Update
             if (section.id == "latest_update") {
                 const latestUpdate = [];
-                if (!$(source.homescreen_LatestUpdate_selector_item, (_g = (_f = $(source.homescreen_LatestUpdate_selector_box)) === null || _f === void 0 ? void 0 : _f.parent()) === null || _g === void 0 ? void 0 : _g.next()).length)
-                    throw new Error("Unable to parse valid Latest Update section!");
+                if (!$(source.homescreen_LatestUpdate_selector_item, (_g = (_f = $(source.homescreen_LatestUpdate_selector_box)) === null || _f === void 0 ? void 0 : _f.parent()) === null || _g === void 0 ? void 0 : _g.next()).length) {
+                    console.log("Unable to parse valid Latest Update section!");
+                    continue;
+                }
                 for (const manga of $(source.homescreen_LatestUpdate_selector_item, $(source.homescreen_LatestUpdate_selector_box).parent().next()).toArray()) {
                     const id = this.idCleaner((_h = $("a", manga).attr('href')) !== null && _h !== void 0 ? _h : "", source);
                     const title = $("a", manga).attr('title');
@@ -1344,8 +1348,10 @@ class Parser {
             //New Titles
             if (section.id == "new_titles") {
                 const NewTitles = [];
-                if (!$("li", (_m = (_l = $(source.homescreen_NewManga_selector)) === null || _l === void 0 ? void 0 : _l.parent()) === null || _m === void 0 ? void 0 : _m.next()).length)
-                    throw new Error("Unable to parse valid New Titles section!");
+                if (!$("li", (_m = (_l = $(source.homescreen_NewManga_selector)) === null || _l === void 0 ? void 0 : _l.parent()) === null || _m === void 0 ? void 0 : _m.next()).length) {
+                    console.log("Unable to parse valid New Titles section!");
+                    continue;
+                }
                 for (const manga of $("li", $(source.homescreen_NewManga_selector).parent().next()).toArray()) {
                     const id = this.idCleaner((_o = $("a", manga).attr('href')) !== null && _o !== void 0 ? _o : "", source);
                     const title = $("h2", manga).text().trim();
@@ -1446,7 +1452,7 @@ class Parser {
         return str;
     }
 }
-exports.Parser = Parser;
+exports.MangaStreamParser = MangaStreamParser;
 
 },{"./LanguageUtils":34,"entities":5,"paperback-extensions-common":12}],37:[function(require,module,exports){
 "use strict";
@@ -1454,9 +1460,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ManhwaX = exports.ManhwaXInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
+const ManhwaXParser_1 = require("./ManhwaXParser");
 const MANHWAX_DOMAIN = "https://manhwax.com";
 exports.ManhwaXInfo = {
-    version: '1.0.1',
+    version: '1.0.2',
     name: 'ManhwaX',
     description: 'Extension that pulls manga from ManhwaX',
     author: 'Netsky',
@@ -1482,6 +1489,7 @@ class ManhwaX extends MangaStream_1.MangaStream {
         this.baseUrl = MANHWAX_DOMAIN;
         this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
         this.hasAdvancedSearchPage = true;
+        this.parser = new ManhwaXParser_1.ManhwaXParser();
         //----MANGA DETAILS SELECTORS
         /*
         If a website uses different names/words for the status below, change them to these.
@@ -1497,6 +1505,7 @@ class ManhwaX extends MangaStream_1.MangaStream {
         //Always be sure to test this in the app!
         this.homescreen_PopularToday_enabled = false;
         this.homescreen_LatestUpdate_enabled = true;
+        this.homescreen_LatestUpdate_selector_item = "div.bsx";
         this.homescreen_NewManga_enabled = false;
         this.homescreen_TopAllTime_enabled = true;
         this.homescreen_TopMonthly_enabled = true;
@@ -1523,5 +1532,50 @@ class ManhwaX extends MangaStream_1.MangaStream {
 }
 exports.ManhwaX = ManhwaX;
 
-},{"../MangaStream":35,"paperback-extensions-common":12}]},{},[37])(37)
+},{"../MangaStream":35,"./ManhwaXParser":38,"paperback-extensions-common":12}],38:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ManhwaXParser = void 0;
+const MangaStreamParser_1 = require("../MangaStreamParser");
+const LanguageUtils_1 = require("../LanguageUtils");
+class ManhwaXParser extends MangaStreamParser_1.MangaStreamParser {
+    parseUpdatedManga($, time, ids, source) {
+        var _a, _b, _c;
+        const updatedManga = [];
+        let loadMore = true;
+        const isLast = this.isLastPage($, "view_more"); //Check if it's the last page or not, needed for some sites!
+        if (!$(source.homescreen_LatestUpdate_selector_item, (_b = (_a = $(source.homescreen_LatestUpdate_selector_box)) === null || _a === void 0 ? void 0 : _a.parent()) === null || _b === void 0 ? void 0 : _b.next()).length)
+            throw new Error("Unable to parse valid update section!");
+        for (const manga of $(source.homescreen_LatestUpdate_selector_item, $(source.homescreen_LatestUpdate_selector_box).parent().next()).toArray()) {
+            const id = this.idCleaner((_c = $("a", manga).attr('href')) !== null && _c !== void 0 ? _c : "", source);
+            const mangaDate = LanguageUtils_1.convertDateAgo($("div.epxdate", $("div.adds", manga)).first().text().trim(), source);
+            //Check if manga time is older than the time porvided, is this manga has an update. Return this.
+            if (!id)
+                continue;
+            if (mangaDate > time) {
+                if (ids.includes(id)) {
+                    updatedManga.push(id);
+                }
+                // If there is an id but no mangadate, this means the site forgot to list the chapters on the front page. However this doesn't mean our search is over! (rare)
+            }
+            else if (id && mangaDate == null) {
+                loadMore = true;
+                // If the latest mangaDate isn't older than our current time, we're done!
+            }
+            else {
+                loadMore = false;
+            }
+            //If the site does not have any more pages, we're done!
+            if (isLast)
+                loadMore = false;
+        }
+        return {
+            ids: updatedManga,
+            loadMore,
+        };
+    }
+}
+exports.ManhwaXParser = ManhwaXParser;
+
+},{"../LanguageUtils":34,"../MangaStreamParser":36}]},{},[37])(37)
 });
