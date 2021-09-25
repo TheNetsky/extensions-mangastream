@@ -928,87 +928,49 @@ __exportStar(require("./RawData"), exports);
 },{"./Chapter":15,"./ChapterDetails":16,"./Constants":17,"./DynamicUI":33,"./HomeSection":34,"./Languages":35,"./Manga":36,"./MangaTile":37,"./MangaUpdate":38,"./PagedResults":39,"./RawData":40,"./RequestHeaders":41,"./RequestInterceptor":42,"./RequestManager":43,"./RequestObject":44,"./ResponseObject":45,"./SearchField":46,"./SearchRequest":47,"./SourceInfo":48,"./SourceManga":49,"./SourceStateManager":50,"./SourceTag":51,"./TagSection":52,"./TrackedManga":53,"./TrackedMangaChapterReadAction":54,"./TrackerActionQueue":55}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BlackArmy = exports.BlackArmyInfo = void 0;
+exports.KumaScans = exports.KumaScansInfo = void 0;
 /* eslint-disable linebreak-style */
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
-const BLACKARMY_DOMAIN = 'https://blackarmy.fr';
-exports.BlackArmyInfo = {
+const KUMASCANS_DOMAIN = 'https://kumascans.com';
+exports.KumaScansInfo = {
     version: MangaStream_1.getExportVersion('0.0.0'),
-    name: 'BlackArmy',
-    description: 'Extension that pulls manga from BlackArmy',
+    name: 'KumaScans',
+    description: 'Extension that pulls manga from KumaScans',
     author: 'Netsky',
     authorWebsite: 'http://github.com/TheNetsky',
     icon: 'icon.png',
     contentRating: paperback_extensions_common_1.ContentRating.MATURE,
-    websiteBaseURL: BLACKARMY_DOMAIN,
+    websiteBaseURL: KUMASCANS_DOMAIN,
     sourceTags: [
         {
             text: 'Notifications',
             type: paperback_extensions_common_1.TagType.GREEN
-        },
-        {
-            text: 'French',
-            type: paperback_extensions_common_1.TagType.GREY
         }
     ]
 };
-class BlackArmy extends MangaStream_1.MangaStream {
+class KumaScans extends MangaStream_1.MangaStream {
     constructor() {
         //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
         super(...arguments);
-        this.baseUrl = BLACKARMY_DOMAIN;
-        this.languageCode = paperback_extensions_common_1.LanguageCode.FRENCH;
-        //----DATE SETTINGS
-        this.dateMonths = {
-            january: 'janvier',
-            february: 'février',
-            march: 'mars',
-            april: 'avril',
-            may: 'mai',
-            june: 'juin',
-            july: 'juillet',
-            august: 'août',
-            september: 'septembre',
-            october: 'octobre',
-            november: 'novembre',
-            december: 'décembre'
-        };
-        this.dateTimeAgo = {
-            now: ['less than an hour', 'just now'],
-            yesterday: ['hier'],
-            years: ['year'],
-            months: ['mois'],
-            weeks: ['semaine'],
-            days: ['jour'],
-            hours: ['heure'],
-            minutes: ['minute'],
-            seconds: ['second']
-        };
+        this.baseUrl = KUMASCANS_DOMAIN;
+        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
         //----MANGA DETAILS SELECTORS
-        this.manga_selector_author = 'Autheur';
-        this.manga_selector_artist = 'Artiste';
-        this.manga_selector_status = 'Statut';
         /*
         If a website uses different names/words for the status below, change them to these.
         These must also be changed id a different language is used!
         Don't worry, these are case insensitive.
         */
-        /*
-            manga_StatusTypes = {
-                ONGOING: "En cours",
-                COMPLETED: "Terminée"
-            }
-        */
+        //manga_StatusTypes: object = { 
+        //    ONGOING: "ongoing",
+        //    COMPLETED: "completed"
+        //}
         //----HOMESCREEN SELECTORS
         //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
         //Always be sure to test this in the app!
         this.homescreen_PopularToday_enabled = true;
-        this.homescreen_PopularToday_selector = 'h2:contains(Populaire aujourd\'hui)';
         this.homescreen_LatestUpdate_enabled = true;
-        this.homescreen_LatestUpdate_selector_box = 'h2:contains(Dernière Sortie)';
         this.homescreen_NewManga_enabled = true;
-        this.homescreen_NewManga_selector = 'h3:contains(nouvelle séries)';
         this.homescreen_TopAllTime_enabled = true;
         this.homescreen_TopMonthly_enabled = true;
         this.homescreen_TopWeekly_enabled = true;
@@ -1026,13 +988,9 @@ class BlackArmy extends MangaStream_1.MangaStream {
         tags_selector_item: string = "li"
         tags_selector_label: string = "span"
         */
-        this.tags_SubdirectoryPathName = '';
-        this.tags_selector_box = 'ul.genre';
-        this.tags_selector_item = 'li';
-        this.tags_selector_label = '';
     }
 }
-exports.BlackArmy = BlackArmy;
+exports.KumaScans = KumaScans;
 
 },{"../MangaStream":59,"paperback-extensions-common":14}],58:[function(require,module,exports){
 "use strict";
