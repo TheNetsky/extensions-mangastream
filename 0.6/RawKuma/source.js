@@ -963,7 +963,7 @@ function convertDateAgo(date, source) {
     if (RegExAgoAmount && RegExAgoAmount[1])
         timeAgoAmount = Number(RegExAgoAmount[1]);
     if (!timeAgoAmount || isNaN(timeAgoAmount) || !timeType) {
-        console.error(`Failed to parse time ago format! Either timeType:${timeType} or timeAgoAmount:${timeAgoAmount} is null.`);
+        console.log(`Failed to parse time ago format! Either timeType:${timeType} or timeAgoAmount:${timeAgoAmount} is null.`);
         //Since this isn't really important, log it and return null. These titles will just be excluded from the updated section.
         return null;
     }
