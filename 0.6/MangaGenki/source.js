@@ -1097,7 +1097,7 @@ exports.MangaStream = exports.getExportVersion = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStreamParser_1 = require("./MangaStreamParser");
 // Set the version for the base, changing this version will change the versions of all sources
-const BASE_VERSION = '2.0.0';
+const BASE_VERSION = '2.0.1';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1299,6 +1299,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
                 method: 'GET',
+                headers: this.constructHeaders({}),
                 param: this.tags_SubdirectoryPathName
             });
             const response = yield this.requestManager.schedule(request, 1);
@@ -1316,6 +1317,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 request = createRequestObject({
                     url: `${this.baseUrl}/page/${page}/?s=`,
                     method: 'GET',
+                    headers: this.constructHeaders({}),
                     param: encodeURI(query.title)
                 });
             }
@@ -1323,6 +1325,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 request = createRequestObject({
                     url: `${this.baseUrl}/`,
                     method: 'GET',
+                    headers: this.constructHeaders({}),
                     param: `genres/${(_b = query === null || query === void 0 ? void 0 : query.includedTags) === null || _b === void 0 ? void 0 : _b.map((x) => x.id)[0]}/page/${page}`
                 });
             }
@@ -1348,6 +1351,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 const request = createRequestObject({
                     url: `${this.baseUrl}/page/${page++}/`,
                     method: 'GET',
+                    headers: this.constructHeaders({})
                 });
                 const response = yield this.requestManager.schedule(request, 1);
                 const $ = this.cheerio.load(response.data);
@@ -1384,6 +1388,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
                 method: 'GET',
+                headers: this.constructHeaders({})
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1412,6 +1417,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
                 method: 'GET',
+                headers: this.constructHeaders({}),
                 param,
             });
             const response = yield this.requestManager.schedule(request, 1);
@@ -1435,23 +1441,8 @@ class MangaStream extends paperback_extensions_common_1.Source {
         if (this.userAgentRandomizer !== '') {
             headers['user-agent'] = this.userAgentRandomizer;
         }
-        headers['referer'] = `${this.baseUrl}${refererPath !== null && refererPath !== void 0 ? refererPath : ''}`;
+        headers['referer'] = `${this.baseUrl}${refererPath !== null && refererPath !== void 0 ? refererPath : ''}/`;
         return headers;
-    }
-    globalRequestHeaders() {
-        if (this.userAgentRandomizer !== '') {
-            return {
-                'referer': `${this.baseUrl}/`,
-                'user-agent': this.userAgentRandomizer,
-                'accept': 'image/jpeg,image/png,image/*;q=0.8'
-            };
-        }
-        else {
-            return {
-                'referer': `${this.baseUrl}/`,
-                'accept': 'image/jpeg,image/png,image/*;q=0.8'
-            };
-        }
     }
     CloudFlareError(status) {
         if (status == 503) {
