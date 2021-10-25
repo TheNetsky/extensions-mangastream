@@ -5,21 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "command": "npm run test",
+            "name": "Run npm test",
             "request": "launch",
-            "name": "Mocha Current File",
-            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-            "args": [
-              "--no-timeouts",
-              "--trace-warnings",
-              "--colors",
-              "${file}",
-              "--require",
-              "ts-node/register"
-            ],
-            "console": "integratedTerminal",
-            "sourceMaps": true,
-            "internalConsoleOptions": "neverOpen"
-      }
+            "type": "node-terminal"
+        }
+
     ]
 }

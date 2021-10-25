@@ -2,8 +2,7 @@
 import {
     LanguageCode,
     SourceInfo,
-    TagType,
-    ContentRating
+    ContentRating,
 } from 'paperback-extensions-common'
 
 import {
@@ -11,29 +10,23 @@ import {
     getExportVersion
 } from '../MangaStream'
 
-const MANGADARK_DOMAIN = 'https://mangadark.com'
+const NSS_DOMAIN = 'https://www.nonstopscans.com'
 
-export const MangaDarkInfo: SourceInfo = {
+export const NonStopScansInfo: SourceInfo = {
     version: getExportVersion('0.0.0'),
-    name: 'MangaDark',
-    description: 'Extension that pulls manga from MangaDark',
+    name: 'NonStopScans',
+    description: 'Extension that pulls manga from NonStopScans',
     author: 'Netsky',
     authorWebsite: 'http://github.com/TheNetsky',
     icon: 'icon.png',
     contentRating: ContentRating.MATURE,
-    websiteBaseURL: MANGADARK_DOMAIN,
-    sourceTags: [
-        {
-            text: 'Notifications',
-            type: TagType.GREEN
-        }
-    ]
+    websiteBaseURL: NSS_DOMAIN
 }
 
-export class MangaDark extends MangaStream {
+export class NonStopScans extends MangaStream {
     //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
 
-    baseUrl: string = MANGADARK_DOMAIN
+    baseUrl: string = NSS_DOMAIN
     languageCode: LanguageCode = LanguageCode.ENGLISH
 
     //----MANGA DETAILS SELECTORS
@@ -48,19 +41,19 @@ export class MangaDark extends MangaStream {
     //    COMPLETED: "completed"
     //}
 
+
     //----HOMESCREEN SELECTORS
     //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
     //Always be sure to test this in the app!
 
-    override homescreen_PopularToday_enabled = true
+    override homescreen_PopularToday_enabled = false
 
     override homescreen_LatestUpdate_enabled = true
+    override homescreen_NewManga_enabled = false
 
-    override homescreen_NewManga_enabled = true
-
-    override homescreen_TopAllTime_enabled = true
-    override homescreen_TopMonthly_enabled = true
-    override homescreen_TopWeekly_enabled = true
+    override homescreen_TopAllTime_enabled = false
+    override homescreen_TopMonthly_enabled = false
+    override homescreen_TopWeekly_enabled = false
 
     /*
     ----TAG SELECTORS
@@ -76,10 +69,5 @@ export class MangaDark extends MangaStream {
     tags_selector_item: string = "li"
     tags_selector_label: string = "span"
     */
-
-    override tags_SubdirectoryPathName = '/genres/'
-    override tags_selector_box = 'div.page'
-    override tags_selector_item = 'li'
-    override tags_selector_label = 'span'
 
 }

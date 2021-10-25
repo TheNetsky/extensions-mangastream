@@ -4,14 +4,14 @@ import {
     SearchRequest,
 } from 'paperback-extensions-common'
 import { MangaStream } from '../MangaStream'
-import { eDoujin } from '../eDoujin/eDoujin'
+import { xCalibrScans } from '../xCalibrScans/xCalibrScans'
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-describe('eDoujin Tests', () => {
+describe('xCalibrScans Tests', () => {
 
     const wrapper: APIWrapper = new APIWrapper()
-    const source: MangaStream = new eDoujin(cheerio)
+    const source: MangaStream = new xCalibrScans(cheerio)
     const expect = chai.expect
     chai.use(chaiAsPromised)
 
@@ -20,7 +20,7 @@ describe('eDoujin Tests', () => {
    * Try to choose a manga which is updated frequently, so that the historical checking test can
    * return proper results, as it is limited to searching 30 days back due to extremely long processing times otherwise.
    */
-    const mangaId = 'reformation-of-the-deadbeat-noble' // secret-class
+    const mangaId = 'martial-god-asura' // chuan-yue-xi-yuan-3000-hou
 
     it('Retrieve Manga Details', async () => {
         const details = await wrapper.getMangaDetails(source, mangaId)

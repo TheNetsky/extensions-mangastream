@@ -1,24 +1,38 @@
-import { LanguageCode, SourceInfo, TagType } from "paperback-extensions-common";
-import { MangaStream } from '../MangaStream'
+/* eslint-disable linebreak-style */
+import {
+    LanguageCode,
+    SourceInfo,
+    TagType,
+    ContentRating
+} from 'paperback-extensions-common'
 
-const ASURASCANS_DOMAIN = "https://www.asurascans.com"
+import {
+    MangaStream,
+    getExportVersion
+} from '../MangaStream'
+
+const ASURASCANS_DOMAIN = 'https://www.asurascans.com'
 
 export const AsuraScansInfo: SourceInfo = {
-    version: '1.0.1',
+    version: getExportVersion('0.0.0'),
     name: 'AsuraScans',
     description: 'Extension that pulls manga from AsuraScans',
     author: 'Netsky',
     authorWebsite: 'http://github.com/TheNetsky',
-    icon: "icon.png",
-    hentaiSource: false,
+    icon: 'icon.png',
+    contentRating: ContentRating.MATURE,
     websiteBaseURL: ASURASCANS_DOMAIN,
     sourceTags: [
         {
-            text: "Notifications",
+            text: 'Notifications',
             type: TagType.GREEN
         },
         {
-            text: "CloudFlare",
+            text: 'CloudFlare',
+            type: TagType.RED
+        },
+        {
+            text: 'Buggy',
             type: TagType.RED
         }
     ]
@@ -29,11 +43,14 @@ export class AsuraScans extends MangaStream {
 
     baseUrl: string = ASURASCANS_DOMAIN
     languageCode: LanguageCode = LanguageCode.ENGLISH
-    hasAdvancedSearchPage: boolean = true
-    sourceTraversalPathName: string = "comics"
+    override sourceTraversalPathName = 'comics'
 
+    override requestManager = createRequestManager({
+        requestsPerSecond: 1.5,
+        requestTimeout: 15000,
+    });
 
-     //----MANGA DETAILS SELECTORS
+    //----MANGA DETAILS SELECTORS
     /*
     If a website uses different names/words for the status below, change them to these.
     These must also be changed id a different language is used!
@@ -49,15 +66,15 @@ export class AsuraScans extends MangaStream {
     //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
     //Always be sure to test this in the app!
 
-    homescreen_PopularToday_enabled: boolean = true
+    override homescreen_PopularToday_enabled = true
 
-    homescreen_LatestUpdate_enabled: boolean = true
+    override homescreen_LatestUpdate_enabled = true
 
-    homescreen_NewManga_enabled: boolean = false
+    override homescreen_NewManga_enabled = false
 
-    homescreen_TopAllTime_enabled: boolean = true
-    homescreen_TopMonthly_enabled: boolean = true
-    homescreen_TopWeekly_enabled: boolean = true
+    override homescreen_TopAllTime_enabled = true
+    override homescreen_TopMonthly_enabled = true
+    override homescreen_TopWeekly_enabled = true
 
     /*
     ----TAG SELECTORS

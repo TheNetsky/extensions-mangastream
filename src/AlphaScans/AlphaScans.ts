@@ -2,8 +2,8 @@
 import {
     LanguageCode,
     SourceInfo,
-    TagType,
-    ContentRating
+    ContentRating,
+    TagType
 } from 'paperback-extensions-common'
 
 import {
@@ -11,29 +11,23 @@ import {
     getExportVersion
 } from '../MangaStream'
 
-const MANGADARK_DOMAIN = 'https://mangadark.com'
+const ALPHASCANS_DOMAIN = 'https://alpha-scans.org'
 
-export const MangaDarkInfo: SourceInfo = {
+export const AlphaScansInfo: SourceInfo = {
     version: getExportVersion('0.0.0'),
-    name: 'MangaDark',
-    description: 'Extension that pulls manga from MangaDark',
+    name: 'AlphaScans',
+    description: 'Extension that pulls manga from AlphaScans',
     author: 'Netsky',
     authorWebsite: 'http://github.com/TheNetsky',
     icon: 'icon.png',
     contentRating: ContentRating.MATURE,
-    websiteBaseURL: MANGADARK_DOMAIN,
-    sourceTags: [
-        {
-            text: 'Notifications',
-            type: TagType.GREEN
-        }
-    ]
+    websiteBaseURL: ALPHASCANS_DOMAIN
 }
 
-export class MangaDark extends MangaStream {
+export class AlphaScans extends MangaStream {
     //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
 
-    baseUrl: string = MANGADARK_DOMAIN
+    baseUrl: string = ALPHASCANS_DOMAIN
     languageCode: LanguageCode = LanguageCode.ENGLISH
 
     //----MANGA DETAILS SELECTORS
@@ -48,15 +42,16 @@ export class MangaDark extends MangaStream {
     //    COMPLETED: "completed"
     //}
 
+
     //----HOMESCREEN SELECTORS
     //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
     //Always be sure to test this in the app!
 
     override homescreen_PopularToday_enabled = true
 
-    override homescreen_LatestUpdate_enabled = true
+    override homescreen_LatestUpdate_enabled = false //Directly links chapter, not manga details page!
 
-    override homescreen_NewManga_enabled = true
+    override homescreen_NewManga_enabled = false
 
     override homescreen_TopAllTime_enabled = true
     override homescreen_TopMonthly_enabled = true
@@ -76,10 +71,5 @@ export class MangaDark extends MangaStream {
     tags_selector_item: string = "li"
     tags_selector_label: string = "span"
     */
-
-    override tags_SubdirectoryPathName = '/genres/'
-    override tags_selector_box = 'div.page'
-    override tags_selector_item = 'li'
-    override tags_selector_label = 'span'
 
 }
