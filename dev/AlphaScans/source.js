@@ -928,6 +928,67 @@ __exportStar(require("./RawData"), exports);
 },{"./Chapter":15,"./ChapterDetails":16,"./Constants":17,"./DynamicUI":33,"./HomeSection":34,"./Languages":35,"./Manga":36,"./MangaTile":37,"./MangaUpdate":38,"./PagedResults":39,"./RawData":40,"./RequestHeaders":41,"./RequestInterceptor":42,"./RequestManager":43,"./RequestObject":44,"./ResponseObject":45,"./SearchField":46,"./SearchRequest":47,"./SourceInfo":48,"./SourceManga":49,"./SourceStateManager":50,"./SourceTag":51,"./TagSection":52,"./TrackedManga":53,"./TrackedMangaChapterReadAction":54,"./TrackerActionQueue":55}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AlphaScans = exports.AlphaScansInfo = void 0;
+/* eslint-disable linebreak-style */
+const paperback_extensions_common_1 = require("paperback-extensions-common");
+const MangaStream_1 = require("../MangaStream");
+const ALPHASCANS_DOMAIN = 'https://alpha-scans.org';
+exports.AlphaScansInfo = {
+    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
+    name: 'AlphaScans',
+    description: 'Extension that pulls manga from AlphaScans',
+    author: 'Netsky',
+    authorWebsite: 'http://github.com/TheNetsky',
+    icon: 'icon.png',
+    contentRating: paperback_extensions_common_1.ContentRating.MATURE,
+    websiteBaseURL: ALPHASCANS_DOMAIN
+};
+class AlphaScans extends MangaStream_1.MangaStream {
+    constructor() {
+        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
+        super(...arguments);
+        this.baseUrl = ALPHASCANS_DOMAIN;
+        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
+        //----MANGA DETAILS SELECTORS
+        /*
+        If a website uses different names/words for the status below, change them to these.
+        These must also be changed id a different language is used!
+        Don't worry, these are case insensitive.
+        */
+        //manga_StatusTypes: object = { 
+        //    ONGOING: "ongoing",
+        //    COMPLETED: "completed"
+        //}
+        //----HOMESCREEN SELECTORS
+        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
+        //Always be sure to test this in the app!
+        this.homescreen_PopularToday_enabled = true;
+        this.homescreen_LatestUpdate_enabled = false; //Directly links chapter, not manga details page!
+        this.homescreen_NewManga_enabled = false;
+        this.homescreen_TopAllTime_enabled = true;
+        this.homescreen_TopMonthly_enabled = true;
+        this.homescreen_TopWeekly_enabled = true;
+        /*
+        ----TAG SELECTORS
+        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
+        tags_SubdirectoryPathName: string = ""
+        tags_selector_box: string = "ul.genre"
+        tags_selector_item: string = "li"
+        tags_selector_label: string = ""
+    
+        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
+        tags_SubdirectoryPathName: string = "/genres/"
+        tags_selector_box: string = "ul.genre"
+        tags_selector_item: string = "li"
+        tags_selector_label: string = "span"
+        */
+    }
+}
+exports.AlphaScans = AlphaScans;
+
+},{"../MangaStream":59,"paperback-extensions-common":14}],58:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertDateAgo = exports.convertDate = void 0;
 /* eslint-disable linebreak-style */
 function convertDate(rawDate, source) {
@@ -1008,7 +1069,7 @@ function convertDateAgo(date, source) {
 }
 exports.convertDateAgo = convertDateAgo;
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1380,7 +1441,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
 }
 exports.MangaStream = MangaStream;
 
-},{"./MangaStreamParser":59,"paperback-extensions-common":14}],59:[function(require,module,exports){
+},{"./MangaStreamParser":60,"paperback-extensions-common":14}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MangaStreamParser = void 0;
@@ -1760,75 +1821,5 @@ class MangaStreamParser {
 }
 exports.MangaStreamParser = MangaStreamParser;
 
-},{"./LanguageUtils":57,"entities":8,"paperback-extensions-common":14}],60:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReadKomik = exports.ReadKomikInfo = void 0;
-/* eslint-disable linebreak-style */
-const paperback_extensions_common_1 = require("paperback-extensions-common");
-const MangaStream_1 = require("../MangaStream");
-const READKOMIK_DOMAIN = 'https://readkomik.com';
-exports.ReadKomikInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
-    name: 'ReadKomik',
-    description: 'Extension that pulls manga from ReadKomik',
-    author: 'Netsky',
-    authorWebsite: 'http://github.com/TheNetsky',
-    icon: 'icon.png',
-    contentRating: paperback_extensions_common_1.ContentRating.MATURE,
-    websiteBaseURL: READKOMIK_DOMAIN,
-    sourceTags: [
-        {
-            text: 'Notifications',
-            type: paperback_extensions_common_1.TagType.GREEN
-        }
-    ]
-};
-class ReadKomik extends MangaStream_1.MangaStream {
-    constructor() {
-        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
-        super(...arguments);
-        this.baseUrl = READKOMIK_DOMAIN;
-        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
-        //----MANGA DETAILS SELECTORS
-        /*
-        If a website uses different names/words for the status below, change them to these.
-        These must also be changed id a different language is used!
-        Don't worry, these are case insensitive.
-        */
-        //manga_StatusTypes: object = { 
-        //    ONGOING: "ongoing",
-        //    COMPLETED: "completed"
-        //}
-        //----HOMESCREEN SELECTORS
-        //Disabling some of these will cause some Home-Page tests to fail, be sure to test this in the app!
-        this.homescreen_PopularToday_enabled = true;
-        this.homescreen_LatestUpdate_enabled = true;
-        this.homescreen_NewManga_enabled = false;
-        this.homescreen_TopAllTime_enabled = true;
-        this.homescreen_TopMonthly_enabled = true;
-        this.homescreen_TopWeekly_enabled = true;
-        /*
-        ----TAG SELECTORS
-        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
-        tags_SubdirectoryPathName: string = ""
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = ""
-    
-        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
-        tags_SubdirectoryPathName: string = "/genres/"
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = "span"
-        */
-        this.tags_SubdirectoryPathName = '';
-        this.tags_selector_box = 'ul.genre';
-        this.tags_selector_item = 'li';
-        this.tags_selector_label = '';
-    }
-}
-exports.ReadKomik = ReadKomik;
-
-},{"../MangaStream":58,"paperback-extensions-common":14}]},{},[60])(60)
+},{"./LanguageUtils":58,"entities":8,"paperback-extensions-common":14}]},{},[57])(57)
 });

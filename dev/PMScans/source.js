@@ -1763,32 +1763,26 @@ exports.MangaStreamParser = MangaStreamParser;
 },{"./LanguageUtils":57,"entities":8,"paperback-extensions-common":14}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReadKomik = exports.ReadKomikInfo = void 0;
+exports.PMScans = exports.PMScansInfo = void 0;
 /* eslint-disable linebreak-style */
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
-const READKOMIK_DOMAIN = 'https://readkomik.com';
-exports.ReadKomikInfo = {
+const PMSCANS_DOMAIN = 'https://reader.pmscans.com';
+exports.PMScansInfo = {
     version: (0, MangaStream_1.getExportVersion)('0.0.0'),
-    name: 'ReadKomik',
-    description: 'Extension that pulls manga from ReadKomik',
+    name: 'PMScans',
+    description: 'Extension that pulls manga from PMScans',
     author: 'Netsky',
     authorWebsite: 'http://github.com/TheNetsky',
     icon: 'icon.png',
     contentRating: paperback_extensions_common_1.ContentRating.MATURE,
-    websiteBaseURL: READKOMIK_DOMAIN,
-    sourceTags: [
-        {
-            text: 'Notifications',
-            type: paperback_extensions_common_1.TagType.GREEN
-        }
-    ]
+    websiteBaseURL: PMSCANS_DOMAIN,
 };
-class ReadKomik extends MangaStream_1.MangaStream {
+class PMScans extends MangaStream_1.MangaStream {
     constructor() {
         //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
         super(...arguments);
-        this.baseUrl = READKOMIK_DOMAIN;
+        this.baseUrl = PMSCANS_DOMAIN;
         this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
         //----MANGA DETAILS SELECTORS
         /*
@@ -1801,9 +1795,10 @@ class ReadKomik extends MangaStream_1.MangaStream {
         //    COMPLETED: "completed"
         //}
         //----HOMESCREEN SELECTORS
-        //Disabling some of these will cause some Home-Page tests to fail, be sure to test this in the app!
+        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
+        //Always be sure to test this in the app!
         this.homescreen_PopularToday_enabled = true;
-        this.homescreen_LatestUpdate_enabled = true;
+        this.homescreen_LatestUpdate_enabled = false; //Directly links to chapter, not detail page!
         this.homescreen_NewManga_enabled = false;
         this.homescreen_TopAllTime_enabled = true;
         this.homescreen_TopMonthly_enabled = true;
@@ -1822,13 +1817,9 @@ class ReadKomik extends MangaStream_1.MangaStream {
         tags_selector_item: string = "li"
         tags_selector_label: string = "span"
         */
-        this.tags_SubdirectoryPathName = '';
-        this.tags_selector_box = 'ul.genre';
-        this.tags_selector_item = 'li';
-        this.tags_selector_label = '';
     }
 }
-exports.ReadKomik = ReadKomik;
+exports.PMScans = PMScans;
 
 },{"../MangaStream":58,"paperback-extensions-common":14}]},{},[60])(60)
 });
