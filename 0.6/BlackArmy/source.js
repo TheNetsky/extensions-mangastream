@@ -1134,7 +1134,7 @@ exports.MangaStream = exports.getExportVersion = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStreamParser_1 = require("./MangaStreamParser");
 // Set the version for the base, changing this version will change the versions of all sources
-const BASE_VERSION = '2.0.1';
+const BASE_VERSION = '2.0.2';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1613,7 +1613,8 @@ class MangaStreamParser {
     parseChapterDetails(data, mangaId, chapterId) {
         var _a, _b;
         const pages = [];
-        let obj = (_b = (_a = /ts_reader.run\((.*)\);/.exec(data)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : ''; //Get the data else return null.
+        //To avoid our regex capturing more scrips, we stop at the first match of ";", also known as the first ending the matching script.
+        let obj = (_b = (_a = /ts_reader.run\((.[^;]+)\)/.exec(data)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : ''; //Get the data else return null.
         if (obj == '')
             throw new Error(`Failed to find page details script for manga ${mangaId}`); //If null, throw error, else parse data to json.
         obj = JSON.parse(obj);
