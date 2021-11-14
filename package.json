@@ -1,7 +1,8 @@
 {
   "name": "extensions-mangastream",
   "version": "2.0.2",
-  "description": "MangaStream extensions for 0.6!",
+  "repositoryName": "MangaStream Extensions (DEV)",
+  "description": "MangaStream Extensions Development",
   "main": "index.js",
   "scripts": {
     "bundle": "paperback bundle",
