@@ -17,4 +17,4 @@ ___
 | Repo name | Description |          Link |
 | ---        |    ----   |         --- |
 | Netsky's Extensions   | Some other sources of mine!        |  [Click me!](https://thenetsky.github.io/netskys-extensions/)    |
-| BuddyComplex Extensions   | Some other sources of mine!        |  [Click me!](https://thenetsky.github.io/extensions-buddycomplex/)    |
+| BuddyComplex Extensions   | My generic class BuddyComplex repo with more sources!        |  [Click me!](https://thenetsky.github.io/extensions-buddycomplex/)    |
