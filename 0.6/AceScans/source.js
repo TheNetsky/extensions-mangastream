@@ -1095,7 +1095,7 @@ exports.MangaStream = exports.getExportVersion = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStreamParser_1 = require("./MangaStreamParser");
 // Set the version for the base, changing this version will change the versions of all sources
-const BASE_VERSION = '2.0.2';
+const BASE_VERSION = '2.0.3';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1289,7 +1289,8 @@ class MangaStream extends paperback_extensions_common_1.Source {
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
-            return this.parser.parseChapterDetails(response.data, mangaId, chapterId);
+            const $ = this.cheerio.load(response.data);
+            return this.parser.parseChapterDetails($, mangaId, chapterId);
         });
     }
     getTags() {
@@ -1554,7 +1555,7 @@ class MangaStreamParser {
             const id = this.idCleaner((_a = $('a', chapter).attr('href')) !== null && _a !== void 0 ? _a : '', source);
             const date = LanguageUtils_1.convertDate($('span.chapterdate', chapter).text().trim(), source);
             const getNumber = (_b = chapter.attribs['data-num']) !== null && _b !== void 0 ? _b : '';
-            const chapterNumberRegex = getNumber.match(/(\d+\.?\d?)/);
+            const chapterNumberRegex = getNumber.match(/(\d+\.?\d?)+/);
             let chapterNumber = 0;
             if (chapterNumberRegex && chapterNumberRegex[1])
                 chapterNumber = Number(chapterNumberRegex[1]);
@@ -1571,8 +1572,9 @@ class MangaStreamParser {
         }
         return chapters;
     }
-    parseChapterDetails(data, mangaId, chapterId) {
+    parseChapterDetails($, mangaId, chapterId) {
         var _a, _b;
+        const data = $.html();
         const pages = [];
         //To avoid our regex capturing more scrips, we stop at the first match of ";", also known as the first ending the matching script.
         let obj = (_b = (_a = /ts_reader.run\((.[^;]+)\)/.exec(data)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : ''; //Get the data else return null.

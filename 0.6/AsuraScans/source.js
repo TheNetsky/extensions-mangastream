@@ -932,9 +932,10 @@ exports.AsuraScans = exports.AsuraScansInfo = void 0;
 /* eslint-disable linebreak-style */
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
+const AsuraScansParser_1 = require("./AsuraScansParser");
 const ASURASCANS_DOMAIN = 'https://www.asurascans.com';
 exports.AsuraScansInfo = {
-    version: MangaStream_1.getExportVersion('0.0.0'),
+    version: MangaStream_1.getExportVersion('0.0.1'),
     name: 'AsuraScans',
     description: 'Extension that pulls manga from AsuraScans',
     author: 'Netsky',
@@ -963,6 +964,7 @@ class AsuraScans extends MangaStream_1.MangaStream {
         super(...arguments);
         this.baseUrl = ASURASCANS_DOMAIN;
         this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
+        this.parser = new AsuraScansParser_1.AsuraScansParser();
         this.sourceTraversalPathName = 'comics';
         this.requestManager = createRequestManager({
             requestsPerSecond: 1.5,
@@ -1005,7 +1007,34 @@ class AsuraScans extends MangaStream_1.MangaStream {
 }
 exports.AsuraScans = AsuraScans;
 
-},{"../MangaStream":59,"paperback-extensions-common":14}],58:[function(require,module,exports){
+},{"../MangaStream":60,"./AsuraScansParser":58,"paperback-extensions-common":14}],58:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AsuraScansParser = void 0;
+/* eslint-disable linebreak-style */
+const MangaStreamParser_1 = require("../MangaStreamParser");
+class AsuraScansParser extends MangaStreamParser_1.MangaStreamParser {
+    parseChapterDetails($, mangaId, chapterId) {
+        const pages = [];
+        for (const script of $('p > noscript').toArray()) {
+            const imageRegex = $(script).text().match(/src="([^"]+)/);
+            let image = 'https://i.imgur.com/GYUxEX8.png';
+            if (imageRegex && imageRegex[1])
+                image = imageRegex[1];
+            pages.push(image);
+        }
+        const chapterDetails = createChapterDetails({
+            id: chapterId,
+            mangaId: mangaId,
+            pages: pages,
+            longStrip: false
+        });
+        return chapterDetails;
+    }
+}
+exports.AsuraScansParser = AsuraScansParser;
+
+},{"../MangaStreamParser":61}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertDateAgo = exports.convertDate = void 0;
@@ -1088,7 +1117,7 @@ function convertDateAgo(date, source) {
 }
 exports.convertDateAgo = convertDateAgo;
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1105,7 +1134,7 @@ exports.MangaStream = exports.getExportVersion = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStreamParser_1 = require("./MangaStreamParser");
 // Set the version for the base, changing this version will change the versions of all sources
-const BASE_VERSION = '2.0.2';
+const BASE_VERSION = '2.0.3';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1299,7 +1328,8 @@ class MangaStream extends paperback_extensions_common_1.Source {
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
-            return this.parser.parseChapterDetails(response.data, mangaId, chapterId);
+            const $ = this.cheerio.load(response.data);
+            return this.parser.parseChapterDetails($, mangaId, chapterId);
         });
     }
     getTags() {
@@ -1460,7 +1490,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
 }
 exports.MangaStream = MangaStream;
 
-},{"./MangaStreamParser":60,"paperback-extensions-common":14}],60:[function(require,module,exports){
+},{"./MangaStreamParser":61,"paperback-extensions-common":14}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MangaStreamParser = void 0;
@@ -1564,7 +1594,7 @@ class MangaStreamParser {
             const id = this.idCleaner((_a = $('a', chapter).attr('href')) !== null && _a !== void 0 ? _a : '', source);
             const date = LanguageUtils_1.convertDate($('span.chapterdate', chapter).text().trim(), source);
             const getNumber = (_b = chapter.attribs['data-num']) !== null && _b !== void 0 ? _b : '';
-            const chapterNumberRegex = getNumber.match(/(\d+\.?\d?)/);
+            const chapterNumberRegex = getNumber.match(/(\d+\.?\d?)+/);
             let chapterNumber = 0;
             if (chapterNumberRegex && chapterNumberRegex[1])
                 chapterNumber = Number(chapterNumberRegex[1]);
@@ -1581,8 +1611,9 @@ class MangaStreamParser {
         }
         return chapters;
     }
-    parseChapterDetails(data, mangaId, chapterId) {
+    parseChapterDetails($, mangaId, chapterId) {
         var _a, _b;
+        const data = $.html();
         const pages = [];
         //To avoid our regex capturing more scrips, we stop at the first match of ";", also known as the first ending the matching script.
         let obj = (_b = (_a = /ts_reader.run\((.[^;]+)\)/.exec(data)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : ''; //Get the data else return null.
@@ -1840,5 +1871,5 @@ class MangaStreamParser {
 }
 exports.MangaStreamParser = MangaStreamParser;
 
-},{"./LanguageUtils":58,"entities":8,"paperback-extensions-common":14}]},{},[57])(57)
+},{"./LanguageUtils":59,"entities":8,"paperback-extensions-common":14}]},{},[57])(57)
 });
