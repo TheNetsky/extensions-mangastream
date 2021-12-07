@@ -932,10 +932,9 @@ exports.AsuraScans = exports.AsuraScansInfo = void 0;
 /* eslint-disable linebreak-style */
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
-const AsuraScansParser_1 = require("./AsuraScansParser");
 const ASURASCANS_DOMAIN = 'https://www.asurascans.com';
 exports.AsuraScansInfo = {
-    version: MangaStream_1.getExportVersion('0.0.1'),
+    version: MangaStream_1.getExportVersion('0.0.2'),
     name: 'AsuraScans',
     description: 'Extension that pulls manga from AsuraScans',
     author: 'Netsky',
@@ -964,7 +963,6 @@ class AsuraScans extends MangaStream_1.MangaStream {
         super(...arguments);
         this.baseUrl = ASURASCANS_DOMAIN;
         this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
-        this.parser = new AsuraScansParser_1.AsuraScansParser();
         this.sourceTraversalPathName = 'comics';
         this.requestManager = createRequestManager({
             requestsPerSecond: 1.5,
@@ -1007,34 +1005,7 @@ class AsuraScans extends MangaStream_1.MangaStream {
 }
 exports.AsuraScans = AsuraScans;
 
-},{"../MangaStream":60,"./AsuraScansParser":58,"paperback-extensions-common":14}],58:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AsuraScansParser = void 0;
-/* eslint-disable linebreak-style */
-const MangaStreamParser_1 = require("../MangaStreamParser");
-class AsuraScansParser extends MangaStreamParser_1.MangaStreamParser {
-    parseChapterDetails($, mangaId, chapterId) {
-        const pages = [];
-        for (const script of $('p > noscript').toArray()) {
-            const imageRegex = $(script).text().match(/src="([^"]+)/);
-            let image = 'https://i.imgur.com/GYUxEX8.png';
-            if (imageRegex && imageRegex[1])
-                image = imageRegex[1];
-            pages.push(image);
-        }
-        const chapterDetails = createChapterDetails({
-            id: chapterId,
-            mangaId: mangaId,
-            pages: pages,
-            longStrip: false
-        });
-        return chapterDetails;
-    }
-}
-exports.AsuraScansParser = AsuraScansParser;
-
-},{"../MangaStreamParser":61}],59:[function(require,module,exports){
+},{"../MangaStream":59,"paperback-extensions-common":14}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertDateAgo = exports.convertDate = void 0;
@@ -1117,7 +1088,7 @@ function convertDateAgo(date, source) {
 }
 exports.convertDateAgo = convertDateAgo;
 
-},{}],60:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1490,7 +1461,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
 }
 exports.MangaStream = MangaStream;
 
-},{"./MangaStreamParser":61,"paperback-extensions-common":14}],61:[function(require,module,exports){
+},{"./MangaStreamParser":60,"paperback-extensions-common":14}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MangaStreamParser = void 0;
@@ -1871,5 +1842,5 @@ class MangaStreamParser {
 }
 exports.MangaStreamParser = MangaStreamParser;
 
-},{"./LanguageUtils":59,"entities":8,"paperback-extensions-common":14}]},{},[57])(57)
+},{"./LanguageUtils":58,"entities":8,"paperback-extensions-common":14}]},{},[57])(57)
 });
