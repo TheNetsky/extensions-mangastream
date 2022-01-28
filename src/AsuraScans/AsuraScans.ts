@@ -14,7 +14,7 @@ import {
 const ASURASCANS_DOMAIN = 'https://www.asurascans.com'
 
 export const AsuraScansInfo: SourceInfo = {
-    version: getExportVersion('0.0.2'),
+    version: getExportVersion('0.0.3'),
     name: 'AsuraScans',
     description: 'Extension that pulls manga from AsuraScans',
     author: 'Netsky',
