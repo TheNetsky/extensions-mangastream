@@ -51,6 +51,21 @@ export class AsuraScans extends MangaStream {
         requestTimeout: 15000,
     });
 
+    override async getChapterDetails(mangaId: string, chapterId: string): Promise<ChapterDetails> {
+        const request = createRequestObject({
+            url: `${this.baseUrl}/${chapterId}/`,
+            method: 'GET',
+            headers: this.constructHeaders({}),
+        })
+
+        const response = await this.requestManager.schedule(request, 1)
+        this.CloudFlareError(response.status)
+        const $ = this.cheerio.load(response.data)
+        const details =  this.parser.parseChapterDetails($, mangaId, chapterId)
+        // removes a page in the website chapter that produces a 404 error
+        details.pages = details.pages.filter(function(e) { return e !== 'https://www.asurascans.com/wp-content/uploads/2021/04/page100-10.jpg' })
+        return details
+    }
     //----MANGA DETAILS SELECTORS
     /*
     If a website uses different names/words for the status below, change them to these.
