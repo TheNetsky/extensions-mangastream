@@ -932,9 +932,10 @@ exports.AsuraScans = exports.AsuraScansInfo = void 0;
 /* eslint-disable linebreak-style */
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
+const AsuraScansParser_1 = require("./AsuraScansParser");
 const ASURASCANS_DOMAIN = 'https://www.asurascans.com';
 exports.AsuraScansInfo = {
-    version: MangaStream_1.getExportVersion('0.0.2'),
+    version: MangaStream_1.getExportVersion('0.0.3'),
     name: 'AsuraScans',
     description: 'Extension that pulls manga from AsuraScans',
     author: 'Netsky',
@@ -963,6 +964,7 @@ class AsuraScans extends MangaStream_1.MangaStream {
         super(...arguments);
         this.baseUrl = ASURASCANS_DOMAIN;
         this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
+        this.parser = new AsuraScansParser_1.AsuraScansParser();
         this.sourceTraversalPathName = 'comics';
         this.requestManager = createRequestManager({
             requestsPerSecond: 1.5,
@@ -1005,7 +1007,46 @@ class AsuraScans extends MangaStream_1.MangaStream {
 }
 exports.AsuraScans = AsuraScans;
 
-},{"../MangaStream":59,"paperback-extensions-common":14}],58:[function(require,module,exports){
+},{"../MangaStream":60,"./AsuraScansParser":58,"paperback-extensions-common":14}],58:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AsuraScansParser = void 0;
+/* eslint-disable linebreak-style */
+const MangaStreamParser_1 = require("../MangaStreamParser");
+class AsuraScansParser extends MangaStreamParser_1.MangaStreamParser {
+    parseChapterDetails($, mangaId, chapterId) {
+        var _a, _b;
+        const data = $.html();
+        const pages = [];
+        //To avoid our regex capturing more scrips, we stop at the first match of ";", also known as the first ending the matching script.
+        let obj = (_b = (_a = /ts_reader.run\((.[^;]+)\)/.exec(data)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : ''; //Get the data else return null.
+        if (obj == '')
+            throw new Error(`Failed to find page details script for manga ${mangaId}`); //If null, throw error, else parse data to json.
+        obj = JSON.parse(obj);
+        if (!(obj === null || obj === void 0 ? void 0 : obj.sources))
+            throw new Error(`Failed for find sources property for manga ${mangaId}`);
+        for (const index of obj.sources) { //Check all sources, if empty continue.
+            if ((index === null || index === void 0 ? void 0 : index.images.length) == 0)
+                continue;
+            index.images.map((p) => {
+                //Asura has a dead link at the start of each of their chapters (Thanks to pandeynmn for noticing)
+                if (p == 'https://www.asurascans.com/wp-content/uploads/2021/04/page100-10.jpg')
+                    return;
+                pages.push(encodeURI(p));
+            });
+        }
+        const chapterDetails = createChapterDetails({
+            id: chapterId,
+            mangaId: mangaId,
+            pages: pages,
+            longStrip: false
+        });
+        return chapterDetails;
+    }
+}
+exports.AsuraScansParser = AsuraScansParser;
+
+},{"../MangaStreamParser":61}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertDateAgo = exports.convertDate = void 0;
@@ -1088,7 +1129,7 @@ function convertDateAgo(date, source) {
 }
 exports.convertDateAgo = convertDateAgo;
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1105,7 +1146,7 @@ exports.MangaStream = exports.getExportVersion = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStreamParser_1 = require("./MangaStreamParser");
 // Set the version for the base, changing this version will change the versions of all sources
-const BASE_VERSION = '2.0.3';
+const BASE_VERSION = '2.1.0';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1258,6 +1299,19 @@ class MangaStream extends paperback_extensions_common_1.Source {
         this.requestManager = createRequestManager({
             requestsPerSecond: 3,
             requestTimeout: 15000,
+            interceptor: {
+                interceptRequest: (request) => __awaiter(this, void 0, void 0, function* () {
+                    var _a;
+                    request.headers = Object.assign(Object.assign({}, ((_a = request.headers) !== null && _a !== void 0 ? _a : {})), {
+                        'user-agent': this.userAgentRandomizer,
+                        'referer': this.baseUrl
+                    });
+                    return request;
+                }),
+                interceptResponse: (response) => __awaiter(this, void 0, void 0, function* () {
+                    return response;
+                })
+            }
         });
         this.parser = new MangaStreamParser_1.MangaStreamParser();
     }
@@ -1268,8 +1322,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
-                method: 'GET',
-                headers: this.constructHeaders({})
+                method: 'GET'
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1281,8 +1334,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
-                method: 'GET',
-                headers: this.constructHeaders({})
+                method: 'GET'
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1294,8 +1346,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${chapterId}/`,
-                method: 'GET',
-                headers: this.constructHeaders({}),
+                method: 'GET'
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1308,7 +1359,6 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
                 method: 'GET',
-                headers: this.constructHeaders({}),
                 param: this.tags_SubdirectoryPathName
             });
             const response = yield this.requestManager.schedule(request, 1);
@@ -1326,7 +1376,6 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 request = createRequestObject({
                     url: `${this.baseUrl}/page/${page}/?s=`,
                     method: 'GET',
-                    headers: this.constructHeaders({}),
                     param: encodeURI(query.title)
                 });
             }
@@ -1334,7 +1383,6 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 request = createRequestObject({
                     url: `${this.baseUrl}/`,
                     method: 'GET',
-                    headers: this.constructHeaders({}),
                     param: `genres/${(_b = query === null || query === void 0 ? void 0 : query.includedTags) === null || _b === void 0 ? void 0 : _b.map((x) => x.id)[0]}/page/${page}`
                 });
             }
@@ -1354,13 +1402,12 @@ class MangaStream extends paperback_extensions_common_1.Source {
             let page = 1;
             let updatedManga = {
                 ids: [],
-                loadMore: true,
+                loadMore: true
             };
             while (updatedManga.loadMore) {
                 const request = createRequestObject({
                     url: `${this.baseUrl}/page/${page++}/`,
-                    method: 'GET',
-                    headers: this.constructHeaders({})
+                    method: 'GET'
                 });
                 const response = yield this.requestManager.schedule(request, 1);
                 const $ = this.cheerio.load(response.data);
@@ -1396,8 +1443,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 sections.push(section6);
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
-                method: 'GET',
-                headers: this.constructHeaders({})
+                method: 'GET'
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1426,8 +1472,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
                 method: 'GET',
-                headers: this.constructHeaders({}),
-                param,
+                param
             });
             const response = yield this.requestManager.schedule(request, 1);
             const $ = this.cheerio.load(response.data);
@@ -1442,16 +1487,8 @@ class MangaStream extends paperback_extensions_common_1.Source {
     getCloudflareBypassRequest() {
         return createRequestObject({
             url: `${this.baseUrl}/`,
-            method: 'GET',
-            headers: this.constructHeaders({})
+            method: 'GET'
         });
-    }
-    constructHeaders(headers, refererPath) {
-        if (this.userAgentRandomizer !== '') {
-            headers['user-agent'] = this.userAgentRandomizer;
-        }
-        headers['referer'] = `${this.baseUrl}${refererPath !== null && refererPath !== void 0 ? refererPath : ''}/`;
-        return headers;
     }
     CloudFlareError(status) {
         if (status == 503) {
@@ -1461,7 +1498,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
 }
 exports.MangaStream = MangaStream;
 
-},{"./MangaStreamParser":60,"paperback-extensions-common":14}],60:[function(require,module,exports){
+},{"./MangaStreamParser":61,"paperback-extensions-common":14}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MangaStreamParser = void 0;
@@ -1842,5 +1879,5 @@ class MangaStreamParser {
 }
 exports.MangaStreamParser = MangaStreamParser;
 
-},{"./LanguageUtils":58,"entities":8,"paperback-extensions-common":14}]},{},[57])(57)
+},{"./LanguageUtils":59,"entities":8,"paperback-extensions-common":14}]},{},[57])(57)
 });

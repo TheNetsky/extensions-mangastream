@@ -1025,7 +1025,7 @@ exports.MangaStream = exports.getExportVersion = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStreamParser_1 = require("./MangaStreamParser");
 // Set the version for the base, changing this version will change the versions of all sources
-const BASE_VERSION = '2.0.3';
+const BASE_VERSION = '2.1.0';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1178,6 +1178,19 @@ class MangaStream extends paperback_extensions_common_1.Source {
         this.requestManager = createRequestManager({
             requestsPerSecond: 3,
             requestTimeout: 15000,
+            interceptor: {
+                interceptRequest: (request) => __awaiter(this, void 0, void 0, function* () {
+                    var _a;
+                    request.headers = Object.assign(Object.assign({}, ((_a = request.headers) !== null && _a !== void 0 ? _a : {})), {
+                        'user-agent': this.userAgentRandomizer,
+                        'referer': this.baseUrl
+                    });
+                    return request;
+                }),
+                interceptResponse: (response) => __awaiter(this, void 0, void 0, function* () {
+                    return response;
+                })
+            }
         });
         this.parser = new MangaStreamParser_1.MangaStreamParser();
     }
@@ -1188,8 +1201,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
-                method: 'GET',
-                headers: this.constructHeaders({})
+                method: 'GET'
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1201,8 +1213,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${this.sourceTraversalPathName}/${mangaId}/`,
-                method: 'GET',
-                headers: this.constructHeaders({})
+                method: 'GET'
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1214,8 +1225,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
         return __awaiter(this, void 0, void 0, function* () {
             const request = createRequestObject({
                 url: `${this.baseUrl}/${chapterId}/`,
-                method: 'GET',
-                headers: this.constructHeaders({}),
+                method: 'GET'
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1228,7 +1238,6 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
                 method: 'GET',
-                headers: this.constructHeaders({}),
                 param: this.tags_SubdirectoryPathName
             });
             const response = yield this.requestManager.schedule(request, 1);
@@ -1246,7 +1255,6 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 request = createRequestObject({
                     url: `${this.baseUrl}/page/${page}/?s=`,
                     method: 'GET',
-                    headers: this.constructHeaders({}),
                     param: encodeURI(query.title)
                 });
             }
@@ -1254,7 +1262,6 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 request = createRequestObject({
                     url: `${this.baseUrl}/`,
                     method: 'GET',
-                    headers: this.constructHeaders({}),
                     param: `genres/${(_b = query === null || query === void 0 ? void 0 : query.includedTags) === null || _b === void 0 ? void 0 : _b.map((x) => x.id)[0]}/page/${page}`
                 });
             }
@@ -1274,13 +1281,12 @@ class MangaStream extends paperback_extensions_common_1.Source {
             let page = 1;
             let updatedManga = {
                 ids: [],
-                loadMore: true,
+                loadMore: true
             };
             while (updatedManga.loadMore) {
                 const request = createRequestObject({
                     url: `${this.baseUrl}/page/${page++}/`,
-                    method: 'GET',
-                    headers: this.constructHeaders({})
+                    method: 'GET'
                 });
                 const response = yield this.requestManager.schedule(request, 1);
                 const $ = this.cheerio.load(response.data);
@@ -1316,8 +1322,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
                 sections.push(section6);
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
-                method: 'GET',
-                headers: this.constructHeaders({})
+                method: 'GET'
             });
             const response = yield this.requestManager.schedule(request, 1);
             this.CloudFlareError(response.status);
@@ -1346,8 +1351,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
             const request = createRequestObject({
                 url: `${this.baseUrl}/`,
                 method: 'GET',
-                headers: this.constructHeaders({}),
-                param,
+                param
             });
             const response = yield this.requestManager.schedule(request, 1);
             const $ = this.cheerio.load(response.data);
@@ -1362,16 +1366,8 @@ class MangaStream extends paperback_extensions_common_1.Source {
     getCloudflareBypassRequest() {
         return createRequestObject({
             url: `${this.baseUrl}/`,
-            method: 'GET',
-            headers: this.constructHeaders({})
+            method: 'GET'
         });
-    }
-    constructHeaders(headers, refererPath) {
-        if (this.userAgentRandomizer !== '') {
-            headers['user-agent'] = this.userAgentRandomizer;
-        }
-        headers['referer'] = `${this.baseUrl}${refererPath !== null && refererPath !== void 0 ? refererPath : ''}/`;
-        return headers;
     }
     CloudFlareError(status) {
         if (status == 503) {
