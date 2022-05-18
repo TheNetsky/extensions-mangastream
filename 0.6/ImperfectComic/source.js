@@ -674,26 +674,32 @@ __exportStar(require("./RawData"), exports);
 },{"./Chapter":14,"./ChapterDetails":15,"./Constants":16,"./DynamicUI":32,"./HomeSection":33,"./Languages":34,"./Manga":35,"./MangaTile":36,"./MangaUpdate":37,"./PagedResults":38,"./RawData":39,"./RequestHeaders":40,"./RequestInterceptor":41,"./RequestManager":42,"./RequestObject":43,"./ResponseObject":44,"./SearchField":45,"./SearchRequest":46,"./SourceInfo":47,"./SourceManga":48,"./SourceStateManager":49,"./SourceTag":50,"./TagSection":51,"./TrackedManga":52,"./TrackedMangaChapterReadAction":53,"./TrackerActionQueue":54}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AlphaScans = exports.AlphaScansInfo = void 0;
+exports.ImperfectComic = exports.ImperfectComicInfo = void 0;
 /* eslint-disable linebreak-style */
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
-const ALPHASCANS_DOMAIN = 'https://alpha-scans.org';
-exports.AlphaScansInfo = {
+const IMPERFECTCOMIC_DOMAIN = 'https://imperfectcomic.com';
+exports.ImperfectComicInfo = {
     version: (0, MangaStream_1.getExportVersion)('0.0.0'),
-    name: 'AlphaScans',
-    description: 'Extension that pulls manga from AlphaScans',
+    name: 'ImperfectComic',
+    description: 'Extension that pulls manga from ImperfectComic',
     author: 'Netsky',
     authorWebsite: 'http://github.com/TheNetsky',
     icon: 'icon.png',
     contentRating: paperback_extensions_common_1.ContentRating.MATURE,
-    websiteBaseURL: ALPHASCANS_DOMAIN
+    websiteBaseURL: IMPERFECTCOMIC_DOMAIN,
+    sourceTags: [
+        {
+            text: 'Notifications',
+            type: paperback_extensions_common_1.TagType.GREEN
+        }
+    ]
 };
-class AlphaScans extends MangaStream_1.MangaStream {
+class ImperfectComic extends MangaStream_1.MangaStream {
     constructor() {
         //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
         super(...arguments);
-        this.baseUrl = ALPHASCANS_DOMAIN;
+        this.baseUrl = IMPERFECTCOMIC_DOMAIN;
         this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
         //----MANGA DETAILS SELECTORS
         /*
@@ -709,7 +715,7 @@ class AlphaScans extends MangaStream_1.MangaStream {
         //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
         //Always be sure to test this in the app!
         this.homescreen_PopularToday_enabled = true;
-        this.homescreen_LatestUpdate_enabled = false; //Directly links chapter, not manga details page!
+        this.homescreen_LatestUpdate_enabled = true;
         this.homescreen_NewManga_enabled = false;
         this.homescreen_TopAllTime_enabled = true;
         this.homescreen_TopMonthly_enabled = true;
@@ -728,9 +734,13 @@ class AlphaScans extends MangaStream_1.MangaStream {
         tags_selector_item: string = "li"
         tags_selector_label: string = "span"
         */
+        this.tags_SubdirectoryPathName = '/genres/';
+        this.tags_selector_box = 'ul.genre';
+        this.tags_selector_item = 'li';
+        this.tags_selector_label = 'span';
     }
 }
-exports.AlphaScans = AlphaScans;
+exports.ImperfectComic = ImperfectComic;
 
 },{"../MangaStream":58,"paperback-extensions-common":13}],57:[function(require,module,exports){
 "use strict";
