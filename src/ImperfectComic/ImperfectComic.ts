@@ -79,7 +79,7 @@ export class ImperfectComic extends MangaStream {
     */
 
     override tags_SubdirectoryPathName = '/genres/'
-    override tags_selector_box = 'ul.genre'
+    override tags_selector_box = 'ul.taxindex'
     override tags_selector_item = 'li'
     override tags_selector_label = 'span'
 
