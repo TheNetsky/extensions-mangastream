@@ -955,7 +955,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
 const IMPERFECTCOMIC_DOMAIN = 'https://imperfectcomic.com';
 exports.ImperfectComicInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
+    version: (0, MangaStream_1.getExportVersion)('0.0.1'),
     name: 'ImperfectComic',
     description: 'Extension that pulls manga from ImperfectComic',
     author: 'Netsky',
