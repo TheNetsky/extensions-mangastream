@@ -1488,7 +1488,7 @@ class MangaStreamParser {
             const mangas = [];
             const collectedIds = [];
             for (const manga of $('div.bs', 'div.listupd').toArray()) {
-                const id = this.idCleaner((_a = $('a', manga).attr('href')) !== null && _a !== void 0 ? _a : '', source);
+                const id = this.idCleaner((_a = $('a', manga).attr('href')) !== null && _a !== void 0 ? _a : '');
                 const title = $('a', manga).attr('title');
                 const image = (_c = (_b = this.getImageSrc($('img', manga))) === null || _b === void 0 ? void 0 : _b.split('?resize')[0]) !== null && _c !== void 0 ? _c : '';
                 const subtitle = $('div.epxs', manga).text().trim();
@@ -1574,7 +1574,7 @@ class MangaStreamParser {
             langCode = paperback_extensions_common_1.LanguageCode.KOREAN;
         for (const chapter of $(source.chapter_selector_item, source.chapter_selector_box).toArray()) {
             const title = $('span.chapternum', chapter).text().trim();
-            const id = this.idCleaner((_a = $('a', chapter).attr('href')) !== null && _a !== void 0 ? _a : '', source);
+            const id = this.idCleaner((_a = $('a', chapter).attr('href')) !== null && _a !== void 0 ? _a : '');
             const date = (0, LanguageUtils_1.convertDate)($('span.chapterdate', chapter).text().trim(), source);
             const getNumber = (_b = chapter.attribs['data-num']) !== null && _b !== void 0 ? _b : '';
             const chapterNumberRegex = getNumber.match(/(\d+\.?\d?)+/);
@@ -1636,7 +1636,7 @@ class MangaStreamParser {
         const mangas = [];
         const collectedIds = [];
         for (const manga of $('div.bs', 'div.listupd').toArray()) {
-            const id = this.idCleaner((_a = $('a', manga).attr('href')) !== null && _a !== void 0 ? _a : '', source);
+            const id = this.idCleaner((_a = $('a', manga).attr('href')) !== null && _a !== void 0 ? _a : '');
             const title = $('a', manga).attr('title');
             const image = (_c = (_b = this.getImageSrc($('img', manga))) === null || _b === void 0 ? void 0 : _b.split('?resize')[0]) !== null && _c !== void 0 ? _c : '';
             const subtitle = $('div.epxs', manga).text().trim();
@@ -1660,7 +1660,7 @@ class MangaStreamParser {
         if (!$(source.homescreen_LatestUpdate_selector_item, (_b = (_a = $(source.homescreen_LatestUpdate_selector_box)) === null || _a === void 0 ? void 0 : _a.parent()) === null || _b === void 0 ? void 0 : _b.next()).length)
             throw new Error('Unable to parse valid update section!');
         for (const manga of $(source.homescreen_LatestUpdate_selector_item, $(source.homescreen_LatestUpdate_selector_box).parent().next()).toArray()) {
-            const id = this.idCleaner((_c = $('a', manga).attr('href')) !== null && _c !== void 0 ? _c : '', source);
+            const id = this.idCleaner((_c = $('a', manga).attr('href')) !== null && _c !== void 0 ? _c : '');
             const mangaDate = (0, LanguageUtils_1.convertDateAgo)($('li > span', $('div.luf', manga)).first().text().trim(), source);
             //Check if manga time is older than the time porvided, is this manga has an update. Return this.
             if (!id)
@@ -1698,7 +1698,7 @@ class MangaStreamParser {
                     continue;
                 }
                 for (const manga of $('div.bsx', $(source.homescreen_PopularToday_selector).parent().next()).toArray()) {
-                    const id = this.idCleaner((_c = $('a', manga).attr('href')) !== null && _c !== void 0 ? _c : '', source);
+                    const id = this.idCleaner((_c = $('a', manga).attr('href')) !== null && _c !== void 0 ? _c : '');
                     const title = $('a', manga).attr('title');
                     const image = (_e = (_d = this.getImageSrc($('img', manga))) === null || _d === void 0 ? void 0 : _d.split('?resize')[0]) !== null && _e !== void 0 ? _e : '';
                     const subtitle = $('div.epxs', manga).text().trim();
@@ -1722,7 +1722,7 @@ class MangaStreamParser {
                     continue;
                 }
                 for (const manga of $(source.homescreen_LatestUpdate_selector_item, $(source.homescreen_LatestUpdate_selector_box).parent().next()).toArray()) {
-                    const id = this.idCleaner((_h = $('a', manga).attr('href')) !== null && _h !== void 0 ? _h : '', source);
+                    const id = this.idCleaner((_h = $('a', manga).attr('href')) !== null && _h !== void 0 ? _h : '');
                     const title = $('a', manga).attr('title');
                     const image = (_k = (_j = this.getImageSrc($('img', manga))) === null || _j === void 0 ? void 0 : _j.split('?resize')[0]) !== null && _k !== void 0 ? _k : '';
                     const subtitle = $('li > span', $('div.luf', manga)).first().text().trim();
@@ -1746,7 +1746,7 @@ class MangaStreamParser {
                     continue;
                 }
                 for (const manga of $('li', $(source.homescreen_NewManga_selector).parent().next()).toArray()) {
-                    const id = this.idCleaner((_o = $('a', manga).attr('href')) !== null && _o !== void 0 ? _o : '', source);
+                    const id = this.idCleaner((_o = $('a', manga).attr('href')) !== null && _o !== void 0 ? _o : '');
                     const title = $('h2', manga).text().trim();
                     const image = (_q = (_p = this.getImageSrc($('img', manga))) === null || _p === void 0 ? void 0 : _p.split('?resize')[0]) !== null && _q !== void 0 ? _q : '';
                     if (!id || !title)
@@ -1764,7 +1764,7 @@ class MangaStreamParser {
             if (section.id == 'top_alltime') {
                 const TopAllTime = [];
                 for (const manga of $('li', source.homescreen_TopAllTime_selector).toArray()) {
-                    const id = this.idCleaner((_r = $('a', manga).attr('href')) !== null && _r !== void 0 ? _r : '', source);
+                    const id = this.idCleaner((_r = $('a', manga).attr('href')) !== null && _r !== void 0 ? _r : '');
                     const title = $('h2', manga).text().trim();
                     const image = (_t = (_s = this.getImageSrc($('img', manga))) === null || _s === void 0 ? void 0 : _s.split('?resize')[0]) !== null && _t !== void 0 ? _t : '';
                     if (!id || !title)
@@ -1782,7 +1782,7 @@ class MangaStreamParser {
             if (section.id == 'top_monthly') {
                 const TopMonthly = [];
                 for (const manga of $('li', source.homescreen_TopMonthly_selector).toArray()) {
-                    const id = this.idCleaner((_u = $('a', manga).attr('href')) !== null && _u !== void 0 ? _u : '', source);
+                    const id = this.idCleaner((_u = $('a', manga).attr('href')) !== null && _u !== void 0 ? _u : '');
                     const title = $('h2', manga).text().trim();
                     const image = (_w = (_v = this.getImageSrc($('img', manga))) === null || _v === void 0 ? void 0 : _v.split('?resize')[0]) !== null && _w !== void 0 ? _w : '';
                     if (!id || !title)
@@ -1800,7 +1800,7 @@ class MangaStreamParser {
             if (section.id == 'top_weekly') {
                 const TopWeekly = [];
                 for (const manga of $('li', source.homescreen_TopWeekly_selector).toArray()) {
-                    const id = this.idCleaner((_x = $('a', manga).attr('href')) !== null && _x !== void 0 ? _x : '', source);
+                    const id = this.idCleaner((_x = $('a', manga).attr('href')) !== null && _x !== void 0 ? _x : '');
                     const title = $('h2', manga).text().trim();
                     const image = (_z = (_y = this.getImageSrc($('img', manga))) === null || _y === void 0 ? void 0 : _y.split('?resize')[0]) !== null && _z !== void 0 ? _z : '';
                     if (!id || !title)
@@ -1843,13 +1843,14 @@ class MangaStreamParser {
     decodeHTMLEntity(str) {
         return entities.decodeHTML(str);
     }
-    idCleaner(str, source) {
-        const base = source.baseUrl.split('://').pop();
-        str = str.replace(/(https:\/\/|http:\/\/)/, '');
-        str = str.replace(/\/$/, '');
-        str = str.replace(`${base}/`, '');
-        str = str.replace(`${source.sourceTraversalPathName}/`, '');
-        return str;
+    idCleaner(str) {
+        var _a;
+        let cleanId = str;
+        cleanId = cleanId.replace(/\/$/, '');
+        cleanId = (_a = cleanId.split('/').pop()) !== null && _a !== void 0 ? _a : null;
+        if (!cleanId)
+            throw new Error(`Unable to parse id for ${str}`);
+        return cleanId;
     }
 }
 exports.MangaStreamParser = MangaStreamParser;
