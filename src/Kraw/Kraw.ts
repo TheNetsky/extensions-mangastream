@@ -10,6 +10,7 @@ import {
     MangaStream,
     getExportVersion
 } from '../MangaStream'
+
 import { KrawParser } from './KrawParser'
 
 const KRAW_DOMAIN = 'https://kraw.org'
@@ -31,6 +32,14 @@ export const KrawInfo: SourceInfo = {
         {
             text: 'Korean',
             type: TagType.GREY
+        },
+        {
+            text: 'English',
+            type: TagType.GREY
+        },
+        {
+            text: 'Chinese',
+            type: TagType.GREY
         }
     ]
 }
@@ -39,7 +48,7 @@ export class Kraw extends MangaStream {
     //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
 
     baseUrl: string = KRAW_DOMAIN
-    languageCode: LanguageCode = LanguageCode.KOREAN
+    languageCode: LanguageCode = LanguageCode.ENGLISH
     override readonly parser: KrawParser = new KrawParser();
 
     //----MANGA DETAILS SELECTORS
@@ -85,7 +94,7 @@ export class Kraw extends MangaStream {
     */
 
     // override tags_SubdirectoryPathName = '/genres/'
-    // override tags_selector_box = 'ul.taxindex'
+    override manga_tag_selector_box = 'div.seriestugenre'
     // override tags_selector_item = 'li'
     // override tags_selector_label = 'span'
 
