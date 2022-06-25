@@ -4,14 +4,14 @@ import {
     SearchRequest,
 } from 'paperback-extensions-common'
 import { MangaStream } from '../MangaStream'
-import { InfernalVoidScans } from '../InfernalVoidScans/InfernalVoidScans'
+import { VoidScans } from '../VoidScans/VoidScans'
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
-describe('InfernalVoidScans Tests', () => {
+describe('VoidScans Tests', () => {
 
     const wrapper: APIWrapper = new APIWrapper()
-    const source: MangaStream = new InfernalVoidScans(cheerio)
+    const source: MangaStream = new VoidScans(cheerio)
     const expect = chai.expect
     chai.use(chaiAsPromised)
 
@@ -20,7 +20,7 @@ describe('InfernalVoidScans Tests', () => {
    * Try to choose a manga which is updated frequently, so that the historical checking test can
    * return proper results, as it is limited to searching 30 days back due to extremely long processing times otherwise.
    */
-    const mangaId = 'escort-warrior' // escort-warrior
+    const mangaId = 'match-made-in-heaven-by-chance' // match-made-in-heaven-by-chance
 
     it('Retrieve Manga Details', async () => {
         const details = await wrapper.getMangaDetails(source, mangaId)

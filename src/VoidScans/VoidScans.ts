@@ -11,17 +11,17 @@ import {
     getExportVersion
 } from '../MangaStream'
 
-const INFERNALVOIDSCANS_DOMAIN = 'https://infernalvoidscans.com'
+const DOMAIN = 'https://void-scans.com'
 
-export const InfernalVoidScansInfo: SourceInfo = {
-    version: getExportVersion('0.0.0'),
-    name: 'InfernalVoidScans',
-    description: 'Extension that pulls manga from InfernalVoidScans',
+export const VoidScansInfo: SourceInfo = {
+    version: getExportVersion('0.0.1'),
+    name: 'VoidScans',
+    description: 'Extension that pulls manga from VoidScans',
     author: 'nicknitewolf',
-    authorWebsite: 'http://github.com/nicknitewolf',
+    authorWebsite: 'https://github.com/nicknitewolf',
     icon: 'icon.png',
     contentRating: ContentRating.MATURE,
-    websiteBaseURL: INFERNALVOIDSCANS_DOMAIN,
+    websiteBaseURL: DOMAIN,
     sourceTags: [
         {
             text: 'Notifications',
@@ -30,10 +30,10 @@ export const InfernalVoidScansInfo: SourceInfo = {
     ]
 }
 
-export class InfernalVoidScans extends MangaStream {
+export class VoidScans extends MangaStream {
     //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
 
-    baseUrl: string = INFERNALVOIDSCANS_DOMAIN
+    baseUrl: string = DOMAIN
     languageCode: LanguageCode = LanguageCode.ENGLISH
 
     //----MANGA DETAILS SELECTORS
