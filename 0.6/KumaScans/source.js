@@ -955,7 +955,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
 const KUMASCANS_DOMAIN = 'https://kumascans.com';
 exports.KumaScansInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
+    version: (0, MangaStream_1.getExportVersion)('0.0.1'),
     name: 'KumaScans',
     description: 'Extension that pulls manga from KumaScans',
     author: 'Netsky',
@@ -991,6 +991,7 @@ class KumaScans extends MangaStream_1.MangaStream {
         //Always be sure to test this in the app!
         this.homescreen_PopularToday_enabled = true;
         this.homescreen_LatestUpdate_enabled = true;
+        this.homescreen_LatestUpdate_selector_item = 'div.bsx';
         this.homescreen_NewManga_enabled = true;
         this.homescreen_TopAllTime_enabled = true;
         this.homescreen_TopMonthly_enabled = true;
