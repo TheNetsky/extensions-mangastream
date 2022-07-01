@@ -123,7 +123,7 @@ function determineBranch(decodeTree, current, nodeIdx, char) {
     // Case 2: Multiple branches encoded in jump table
     if (jumpOffset) {
         var value = char - jumpOffset;
-        return value < 0 || value > branchCount
+        return value < 0 || value >= branchCount
             ? -1
             : decodeTree[nodeIdx + value] - 1;
     }
@@ -149,14 +149,32 @@ function determineBranch(decodeTree, current, nodeIdx, char) {
 exports.determineBranch = determineBranch;
 var htmlDecoder = getDecoder(decode_data_html_js_1.default);
 var xmlDecoder = getDecoder(decode_data_xml_js_1.default);
+/**
+ * Decodes an HTML string, allowing for entities not terminated by a semi-colon.
+ *
+ * @param str The string to decode.
+ * @returns The decoded string.
+ */
 function decodeHTML(str) {
     return htmlDecoder(str, false);
 }
 exports.decodeHTML = decodeHTML;
+/**
+ * Decodes an HTML string, requiring all entities to be terminated by a semi-colon.
+ *
+ * @param str The string to decode.
+ * @returns The decoded string.
+ */
 function decodeHTMLStrict(str) {
     return htmlDecoder(str, true);
 }
 exports.decodeHTMLStrict = decodeHTMLStrict;
+/**
+ * Decodes an XML string, requiring all entities to be terminated by a semi-colon.
+ *
+ * @param str The string to decode.
+ * @returns The decoded string.
+ */
 function decodeXML(str) {
     return xmlDecoder(str, true);
 }
@@ -234,14 +252,15 @@ var encode_html_js_1 = __importDefault(require("./generated/encode-html.js"));
 var escape_js_1 = require("./escape.js");
 var htmlReplacer = /[\t\n!-,./:-@[-`\f{-}$\x80-\uFFFF]/g;
 /**
- * Encodes all entities and non-ASCII characters in the input.
+ * Encodes all characters in the input using HTML entities. This includes
+ * characters that are valid ASCII characters in HTML documents, such as `#`.
  *
- * This includes characters that are valid ASCII characters in HTML documents.
- * For example `#` will be encoded as `&num;`. To get a more compact output,
- * consider using the `encodeNonAsciiHTML` function.
+ * To get a more compact output, consider using the `encodeNonAsciiHTML`
+ * function, which will only encode characters that are not valid in HTML
+ * documents, as well as non-ASCII characters.
  *
- * If a character has no equivalent entity, a
- * numeric hexadecimal reference (eg. `&#xfc;`) will be used.
+ * If a character has no equivalent entity, a numeric hexadecimal reference
+ * (eg. `&#xfc;`) will be used.
  */
 function encodeHTML(data) {
     return encodeHTMLTrieRe(htmlReplacer, data);
@@ -249,10 +268,11 @@ function encodeHTML(data) {
 exports.encodeHTML = encodeHTML;
 /**
  * Encodes all non-ASCII characters, as well as characters not valid in HTML
- * documents using HTML entities.
+ * documents using HTML entities. This function will not encode characters that
+ * are valid in HTML documents, such as `#`.
  *
- * If a character has no equivalent entity, a
- * numeric hexadecimal reference (eg. `&#xfc;`) will be used.
+ * If a character has no equivalent entity, a numeric hexadecimal reference
+ * (eg. `&#xfc;`) will be used.
  */
 function encodeNonAsciiHTML(data) {
     return encodeHTMLTrieRe(escape_js_1.xmlReplacer, data);
@@ -460,7 +480,7 @@ var EncodingMode;
 (function (EncodingMode) {
     /**
      * The output is UTF-8 encoded. Only characters that need escaping within
-     * HTML will be escaped.
+     * XML will be escaped.
      */
     EncodingMode[EncodingMode["UTF8"] = 0] = "UTF8";
     /**
@@ -953,9 +973,9 @@ exports.InfernalVoidScans = exports.InfernalVoidScansInfo = void 0;
 /* eslint-disable linebreak-style */
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
-const INFERNALVOIDSCANS_DOMAIN = 'https://infernalvoidscans.com';
+const INFERNALVOIDSCANS_DOMAIN = 'https://void-scans.com';
 exports.InfernalVoidScansInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
+    version: (0, MangaStream_1.getExportVersion)('0.0.1'),
     name: 'InfernalVoidScans',
     description: 'Extension that pulls manga from InfernalVoidScans',
     author: 'nicknitewolf',
