@@ -10,20 +10,24 @@ import {
     MangaStream,
     getExportVersion
 } from '../MangaStream'
-import { SushiScansParser } from './SushiScansParser'
+import { SushiScanParser } from './SushiScanParser'
 
-const SUSHI_SCANS_DOMAIN = 'https://sushiscan.su'
+const SUSHI_SCAN_DOMAIN = 'https://sushiscan.su'
 
-export const SushiScansInfo: SourceInfo = {
+export const SushiScanInfo: SourceInfo = {
     version: getExportVersion('0.0.0'),
-    name: 'Sushi Scans',
+    name: 'Sushi Scan',
     description: 'Extension that pulls manga from sushiscan.su',
     author: 'btylerh7',
     authorWebsite: 'http://github.com/btylerh7',
     icon: 'logo.png',
     contentRating: ContentRating.EVERYONE,
-    websiteBaseURL: SUSHI_SCANS_DOMAIN,
+    websiteBaseURL: SUSHI_SCAN_DOMAIN,
     sourceTags: [
+        {
+            text: 'Notifications',
+            type: TagType.GREEN
+        },
         {
             text: 'French',
             type: TagType.GREY
@@ -31,12 +35,12 @@ export const SushiScansInfo: SourceInfo = {
     ]
 }
 
-export class SushiScans extends MangaStream {
+export class SushiScan extends MangaStream {
     //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
 
-    baseUrl: string = SUSHI_SCANS_DOMAIN
+    baseUrl: string = SUSHI_SCAN_DOMAIN
     languageCode: LanguageCode = LanguageCode.FRENCH
-    override parser = new SushiScansParser()
+    override parser = new SushiScanParser()
 
     //----MANGA DETAILS SELECTORS
     /*
@@ -48,6 +52,16 @@ export class SushiScans extends MangaStream {
     override manga_selector_artist = 'Dessinateur'
     override manga_selector_author = 'Auteur'
     override manga_selector_status = 'Statut'
+
+     /**
+     * The selector for the manga status.
+     * These can change depending on the language
+     * Default = "ONGOING: "ONGOING", COMPLETED: "COMPLETED"
+    */
+    override manga_StatusTypes = {
+        ONGOING: 'En Cours',
+        COMPLETED: 'Terminé'
+    }
 
     override tags_SubdirectoryPathName = 'manga'
 
@@ -76,9 +90,9 @@ export class SushiScans extends MangaStream {
      * Default =  English Translation
      */
     override dateTimeAgo = {
-        now: ['moins d’une heure', "tout à l'heure"],
+        now: ['moins d’une heure', "tout à l'heure", "moment", "maintenant"], // The "now" quotes are not confirmed
         yesterday: ['hier'],
-        years: ['année'],
+        years: ['an'],
         months: ['mois'],
         weeks: ['semaine'],
         days: ['jour'],
@@ -100,13 +114,12 @@ export class SushiScans extends MangaStream {
     override homescreen_LatestUpdate_selector_item = 'div.bsx'
 
     override homescreen_TopAllTime_enabled = true
-    override homescreen_TopAllTime_selector = 'div.serieslist.pop.wpop.wpop-alltime'
 
     override homescreen_TopMonthly_enabled = true
-    override homescreen_TopMonthly_selector = 'div.serieslist.pop.wpop.wpop-monthly'
 
     override homescreen_TopWeekly_enabled = true
-    override homescreen_TopWeekly_selector = 'div.serieslist.pop.wpop.wpop-weekly'
+
+    override homescreen_NewManga_enabled = false
 
     /*
     ----TAG SELECTORS

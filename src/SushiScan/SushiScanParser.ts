@@ -1,9 +1,12 @@
-import { TagSection, Tag } from 'paperback-extensions-common';
+import { 
+    TagSection,
+    Tag 
+} from 'paperback-extensions-common';
 import { 
     MangaStreamParser
 } from '../MangaStreamParser'
 
-export class SushiScansParser extends MangaStreamParser {
+export class SushiScanParser extends MangaStreamParser {
     parseTags($: CheerioSelector, source: any): TagSection[] {
         const arrayTags: Tag[] = []
         for (const tag of $('li', $('.dropdown-menu.c4.genrez')).toArray()) {
