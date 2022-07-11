@@ -1051,82 +1051,6 @@ exports.convertDateAgo = convertDateAgo;
 
 },{}],57:[function(require,module,exports){
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LelManga = exports.LelMangaInfo = void 0;
-/* eslint-disable linebreak-style */
-const paperback_extensions_common_1 = require("paperback-extensions-common");
-const MangaStream_1 = require("../MangaStream");
-const LELMANGA_DOMAIN = 'https://www.lelmanga.com';
-exports.LelMangaInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
-    name: 'LelManga',
-    description: 'Extension that pulls manga from LelManga',
-    author: 'Netsky',
-    authorWebsite: 'http://github.com/TheNetsky',
-    icon: 'icon.png',
-    contentRating: paperback_extensions_common_1.ContentRating.MATURE,
-    websiteBaseURL: LELMANGA_DOMAIN,
-    sourceTags: [
-        {
-            text: 'Notifications',
-            type: paperback_extensions_common_1.TagType.GREEN
-        },
-        {
-            text: 'French',
-            type: paperback_extensions_common_1.TagType.GREY
-        }
-    ]
-};
-class LelManga extends MangaStream_1.MangaStream {
-    constructor() {
-        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
-        super(...arguments);
-        this.baseUrl = LELMANGA_DOMAIN;
-        this.languageCode = paperback_extensions_common_1.LanguageCode.FRENCH;
-        //----MANGA DETAILS SELECTORS
-        /*
-        If a website uses different names/words for the status below, change them to these.
-        These must also be changed id a different language is used!
-        Don't worry, these are case insensitive.
-        */
-        //----MANGA DETAILS SELECTORS
-        this.manga_selector_author = 'Autheur';
-        this.manga_selector_artist = 'Artiste';
-        //manga_StatusTypes: object = { 
-        //    ONGOING: "ongoing",
-        //    COMPLETED: "completed"
-        //}
-        //----HOMESCREEN SELECTORS
-        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
-        //Always be sure to test this in the app!
-        this.homescreen_PopularToday_enabled = true;
-        this.homescreen_PopularToday_selector = 'h2:contains(Top Managa Aujourd\'hui)';
-        this.homescreen_LatestUpdate_enabled = true;
-        this.homescreen_LatestUpdate_selector_box = 'h2:contains(Dernières Sorties)';
-        this.homescreen_NewManga_enabled = false;
-        this.homescreen_TopAllTime_enabled = true;
-        this.homescreen_TopMonthly_enabled = true;
-        this.homescreen_TopWeekly_enabled = true;
-        /*
-        ----TAG SELECTORS
-        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
-        tags_SubdirectoryPathName: string = ""
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = ""
-    
-        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
-        tags_SubdirectoryPathName: string = "/genres/"
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = "span"
-        */
-    }
-}
-exports.LelManga = LelManga;
-
-},{"../MangaStream":58,"paperback-extensions-common":13}],58:[function(require,module,exports){
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1497,7 +1421,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
 }
 exports.MangaStream = MangaStream;
 
-},{"./MangaStreamParser":59,"paperback-extensions-common":13}],59:[function(require,module,exports){
+},{"./MangaStreamParser":58,"paperback-extensions-common":13}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MangaStreamParser = void 0;
@@ -1879,5 +1803,146 @@ class MangaStreamParser {
 }
 exports.MangaStreamParser = MangaStreamParser;
 
-},{"./LanguageUtils":56,"entities":9,"paperback-extensions-common":13}]},{},[57])(57)
+},{"./LanguageUtils":56,"entities":9,"paperback-extensions-common":13}],59:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SushiScan = exports.SushiScanInfo = void 0;
+/* eslint-disable linebreak-style */
+const paperback_extensions_common_1 = require("paperback-extensions-common");
+const MangaStream_1 = require("../MangaStream");
+const SushiScanParser_1 = require("./SushiScanParser");
+const SUSHI_SCAN_DOMAIN = 'https://sushiscan.su';
+exports.SushiScanInfo = {
+    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
+    name: 'Sushi Scan',
+    description: 'Extension that pulls manga from sushiscan.su',
+    author: 'btylerh7',
+    authorWebsite: 'http://github.com/btylerh7',
+    icon: 'logo.png',
+    contentRating: paperback_extensions_common_1.ContentRating.EVERYONE,
+    websiteBaseURL: SUSHI_SCAN_DOMAIN,
+    sourceTags: [
+        {
+            text: 'Notifications',
+            type: paperback_extensions_common_1.TagType.GREEN
+        },
+        {
+            text: 'French',
+            type: paperback_extensions_common_1.TagType.GREY
+        }
+    ]
+};
+class SushiScan extends MangaStream_1.MangaStream {
+    constructor() {
+        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
+        super(...arguments);
+        this.baseUrl = SUSHI_SCAN_DOMAIN;
+        this.languageCode = paperback_extensions_common_1.LanguageCode.FRENCH;
+        this.parser = new SushiScanParser_1.SushiScanParser();
+        //----MANGA DETAILS SELECTORS
+        /*
+        If a website uses different names/words for the status below, change them to these.
+        These must also be changed id a different language is used!
+        Don't worry, these are case insensitive.
+        */
+        this.manga_selector_artist = 'Dessinateur';
+        this.manga_selector_author = 'Auteur';
+        this.manga_selector_status = 'Statut';
+        /**
+        * The selector for the manga status.
+        * These can change depending on the language
+        * Default = "ONGOING: "ONGOING", COMPLETED: "COMPLETED"
+       */
+        this.manga_StatusTypes = {
+            ONGOING: 'En Cours',
+            COMPLETED: 'Terminé'
+        };
+        this.tags_SubdirectoryPathName = 'manga';
+        //----DATE SELECTORS----
+        /**
+         * Enter the months for the website's language in correct order, case insensitive.
+         * Default = English Translation
+         */
+        this.dateMonths = {
+            january: 'janvier',
+            february: 'février',
+            march: 'mars',
+            april: 'avril',
+            may: 'mai',
+            june: 'juin',
+            july: 'juillet',
+            august: 'août',
+            september: 'septembre',
+            october: 'octobre',
+            november: 'novembre',
+            december: 'décembre'
+        };
+        /**
+         * In this object, add the site's translations for the following time formats, case insensitive.
+         * If the site uses "12 hours ago" or "1 hour ago", only adding "hour" will be enough since "hours" includes "hour".
+         * Default =  English Translation
+         */
+        this.dateTimeAgo = {
+            now: ['moins d’une heure', "tout à l'heure", "moment", "maintenant"],
+            yesterday: ['hier'],
+            years: ['an'],
+            months: ['mois'],
+            weeks: ['semaine'],
+            days: ['jour'],
+            hours: ['heur'],
+            minutes: ['min'],
+            seconds: ['second']
+        };
+        //----HOMESCREEN SELECTORS
+        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
+        //Always be sure to test this in the app!
+        this.homescreen_PopularToday_enabled = true;
+        this.homescreen_PopularToday_selector = "h2:contains(Populaire Aujourd'hui)";
+        this.homescreen_LatestUpdate_enabled = true;
+        this.homescreen_LatestUpdate_selector_box = 'h2:contains(Dernières Sorties)';
+        this.homescreen_LatestUpdate_selector_item = 'div.bsx';
+        this.homescreen_TopAllTime_enabled = true;
+        this.homescreen_TopMonthly_enabled = true;
+        this.homescreen_TopWeekly_enabled = true;
+        this.homescreen_NewManga_enabled = false;
+        /*
+        ----TAG SELECTORS
+        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
+        tags_SubdirectoryPathName: string = ""
+        tags_selector_box: string = "ul.genre"
+        tags_selector_item: string = "li"
+        tags_selector_label: string = ""
+    
+        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
+        tags_SubdirectoryPathName: string = "/genres/"
+        tags_selector_box: string = "ul.genre"
+        tags_selector_item: string = "li"
+        tags_selector_label: string = "span"
+        */
+    }
+}
+exports.SushiScan = SushiScan;
+
+},{"../MangaStream":57,"./SushiScanParser":60,"paperback-extensions-common":13}],60:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SushiScanParser = void 0;
+const MangaStreamParser_1 = require("../MangaStreamParser");
+class SushiScanParser extends MangaStreamParser_1.MangaStreamParser {
+    parseTags($, source) {
+        const arrayTags = [];
+        for (const tag of $('li', $('.dropdown-menu.c4.genrez')).toArray()) {
+            const label = $('label', tag).text().trim();
+            const id = $('label', tag).text().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(' ', '-').trim();
+            if (!id || !label)
+                continue;
+            arrayTags.push({ id: id, label: label });
+        }
+        const tagSections = [createTagSection({ id: '0', label: 'genres', tags: arrayTags.map(x => createTag(x)) })];
+        return tagSections;
+    }
+}
+exports.SushiScanParser = SushiScanParser;
+
+},{"../MangaStreamParser":58}]},{},[59])(59)
 });
