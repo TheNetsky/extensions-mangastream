@@ -976,7 +976,7 @@ const MangaStream_1 = require("../MangaStream");
 const AsuraScansParser_1 = require("./AsuraScansParser");
 const ASURASCANS_DOMAIN = 'https://www.asurascans.com';
 exports.AsuraScansInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.4'),
+    version: (0, MangaStream_1.getExportVersion)('0.0.5'),
     name: 'AsuraScans',
     description: 'Extension that pulls manga from AsuraScans',
     author: 'Netsky',
@@ -1006,7 +1006,7 @@ class AsuraScans extends MangaStream_1.MangaStream {
         this.baseUrl = ASURASCANS_DOMAIN;
         this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
         this.parser = new AsuraScansParser_1.AsuraScansParser();
-        this.sourceTraversalPathName = 'manga';
+        this.sourceTraversalPathName = 'comics';
         this.requestManager = createRequestManager({
             requestsPerSecond: 2,
             requestTimeout: 15000,
