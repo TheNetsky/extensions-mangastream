@@ -1610,7 +1610,7 @@ class MangaStreamParser {
         for (const manga of $(source.homescreen_LatestUpdate_selector_item, $(source.homescreen_LatestUpdate_selector_box).parent().next()).toArray()) {
             const id = this.idCleaner((_c = $('a', manga).attr('href')) !== null && _c !== void 0 ? _c : '');
             const mangaDate = (0, LanguageUtils_1.convertDateAgo)($('li > span', $('div.luf, ul.chfiv', manga)).first().text().trim(), source);
-            //Check if manga time is older than the time porvided, is this manga has an update. Return this.
+            //Check if manga time is older than the time provided, is this manga has an update. Return this.
             if (!id)
                 continue;
             if (mangaDate > time) {
@@ -1897,9 +1897,9 @@ class ManhwaXParser extends MangaStreamParser_1.MangaStreamParser {
         if (!$(source.homescreen_LatestUpdate_selector_item, (_b = (_a = $(source.homescreen_LatestUpdate_selector_box)) === null || _a === void 0 ? void 0 : _a.parent()) === null || _b === void 0 ? void 0 : _b.next()).length)
             throw new Error('Unable to parse valid update section!');
         for (const manga of $(source.homescreen_LatestUpdate_selector_item, $(source.homescreen_LatestUpdate_selector_box).parent().next()).toArray()) {
-            const id = this.idCleaner((_c = $('a', manga).attr('href')) !== null && _c !== void 0 ? _c : '', source);
+            const id = this.idCleaner((_c = $('a', manga).attr('href')) !== null && _c !== void 0 ? _c : '');
             const mangaDate = (0, LanguageUtils_1.convertDateAgo)($('div.epxdate', $('div.adds', manga)).first().text().trim(), source);
-            //Check if manga time is older than the time porvided, is this manga has an update. Return this.
+            //Check if manga time is older than the time provided, is this manga has an update. Return this.
             if (!id)
                 continue;
             if (mangaDate > time) {
