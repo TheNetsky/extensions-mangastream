@@ -8,7 +8,7 @@ import {
 import { MangaStream, getExportVersion } from "../MangaStream";
 import { LuminousScansParser } from './LuminousScansParser'
 
-const LUMINOUSSCANS_DOMAIN = "https://luminousscans.com/";
+const LUMINOUSSCANS_DOMAIN = "https://luminousscans.com";
 
 export const LuminousScansInfo: SourceInfo = {
     version: getExportVersion("0.0.0"),

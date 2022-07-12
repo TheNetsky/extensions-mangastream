@@ -34,10 +34,10 @@ export class LuminousScansParser extends MangaStreamParser {
         if (mangaId.toUpperCase().endsWith('-RAW') && source.languageCode == 'gb') langCode = LanguageCode.KOREAN
 
         const chapterNumberRegex = /(\d+\.?\d?)+/
-        const rawChapters = $(source.chapter_selector_item, source.chapter_selector_box).toArray()
-        let currentChapter = Number(rawChapters.pop()?.attribs['data-num'].match(chapterNumberRegex)?.[1] ?? 0)
+        const rawChapters = $(source.chapter_selector_item, source.chapter_selector_box).toArray().reverse()
+        let currentChapter = Number(rawChapters[0]?.attribs['data-num'].match(chapterNumberRegex)?.[1] ?? 0)
         
-        for (const chapter of rawChapters.reverse()) {
+        for (const chapter of rawChapters) {
             const title = $('span.chapternum', chapter).text().trim()
             const id = this.idCleaner($('a', chapter).attr('href') ?? '')
             const date = convertDate($('span.chapterdate', chapter).text().trim(), source)
