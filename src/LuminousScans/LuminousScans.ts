@@ -6,6 +6,7 @@ import {
 } from "paperback-extensions-common";
 
 import { MangaStream, getExportVersion } from "../MangaStream";
+import { LuminousScansParser } from './LuminousScansParser'
 
 const LUMINOUSSCANS_DOMAIN = "https://luminousscans.com/";
 
@@ -58,4 +59,6 @@ export class LuminousScans extends MangaStream {
     override tags_selector_box = "ul.genrez";
     override tags_selector_item = "li";
     override tags_selector_label = "label";
+
+    override parser = new LuminousScansParser();
 }
