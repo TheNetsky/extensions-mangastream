@@ -3,7 +3,7 @@ import {
     LanguageCode,
     TagSection,
     Tag 
-} from 'paperback-extensions-common';
+} from 'paperback-extensions-common'
 
 import {
     convertDate
@@ -43,7 +43,7 @@ export class LuminousScansParser extends MangaStreamParser {
             const date = convertDate($('span.chapterdate', chapter).text().trim(), source)
             //const getNumber = chapter.attribs['data-num'] ?? ''
             //const chapterNumberRegex = getNumber.match(/(\d+\.?\d?)+/)
-            let chapterNumber = currentChapter++
+            const chapterNumber = currentChapter++
             //if (chapterNumberRegex && chapterNumberRegex[1]) chapterNumber = Number(chapterNumberRegex[1])
     
             if (!id) continue

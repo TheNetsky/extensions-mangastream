@@ -3,23 +3,25 @@ import {
     LanguageCode,
     SourceInfo,
     ContentRating,
-} from "paperback-extensions-common";
+} from 'paperback-extensions-common'
 
-import { MangaStream, getExportVersion } from "../MangaStream";
+import { MangaStream,
+    getExportVersion } from '../MangaStream'
+
 import { LuminousScansParser } from './LuminousScansParser'
 
-const LUMINOUSSCANS_DOMAIN = "https://luminousscans.com";
+const LUMINOUSSCANS_DOMAIN = 'https://luminousscans.com'
 
 export const LuminousScansInfo: SourceInfo = {
-    version: getExportVersion("0.0.0"),
-    name: "LuminousScans",
-    description: "Extension that pulls manga from LuminousScans",
-    author: "yehru",
-    authorWebsite: "http://github.com/yehrupx",
-    icon: "logo.png",
+    version: getExportVersion('0.0.0'),
+    name: 'LuminousScans',
+    description: 'Extension that pulls manga from LuminousScans',
+    author: 'yehru',
+    authorWebsite: 'http://github.com/yehrupx',
+    icon: 'logo.png',
     contentRating: ContentRating.MATURE,
     websiteBaseURL: LUMINOUSSCANS_DOMAIN,
-};
+}
 
 export class LuminousScans extends MangaStream {
     //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
@@ -27,9 +29,7 @@ export class LuminousScans extends MangaStream {
     baseUrl: string = LUMINOUSSCANS_DOMAIN;
     languageCode: LanguageCode = LanguageCode.ENGLISH;
 
-    override sourceTraversalPathName = "series";
-
-    // need to change alternative titles selection w parser
+    override sourceTraversalPathName = 'series';
 
     //----MANGA DETAILS SELECTORS
     /*
@@ -55,10 +55,10 @@ export class LuminousScans extends MangaStream {
     override homescreen_TopWeekly_enabled = true;
 
     //----TAG SELECTORS
-    override tags_SubdirectoryPathName = "/series/";
-    override tags_selector_box = "ul.genrez";
-    override tags_selector_item = "li";
-    override tags_selector_label = "label";
+    override tags_SubdirectoryPathName = '/series/';
+    override tags_selector_box = 'ul.genrez';
+    override tags_selector_item = 'li';
+    override tags_selector_label = 'label';
 
     override parser = new LuminousScansParser();
 }
