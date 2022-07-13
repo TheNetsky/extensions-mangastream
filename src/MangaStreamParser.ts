@@ -29,7 +29,7 @@ export class MangaStreamParser {
         const titles = []
         titles.push(this.decodeHTMLEntity($('h1.entry-title').text().trim()))
 
-        const altTitles = $(`span:contains(${source.manga_selector_AlternativeTitles}), b:contains(${source.manga_selector_AlternativeTitles})+span, .imptdt:contains(${source.manga_selector_AlternativeTitles}) i`).contents().remove().last().text().split(',') //Language dependant
+        const altTitles = $(`span:contains(${source.manga_selector_AlternativeTitles}), b:contains(${source.manga_selector_AlternativeTitles})+span, .imptdt:contains(${source.manga_selector_AlternativeTitles}) i, h1.entry-title+span`).contents().remove().last().text().split(',') //Language dependant
         for (const title of altTitles) {
             if (title == '') continue
             titles.push(this.decodeHTMLEntity(title.trim()))
@@ -173,7 +173,7 @@ export class MangaStreamParser {
             const id = this.idCleaner($('a', manga).attr('href') ?? '')
             const mangaDate = convertDateAgo($('li > span', $('div.luf, ul.chfiv', manga)).first().text().trim(), source)
 
-            //Check if manga time is older than the time provided, is this manga has an update. Return this.
+            //Check if manga time is older than the time porvided, is this manga has an update. Return this.
             if (!id) continue
             if (mangaDate > time) {
                 if (ids.includes(id)) {
@@ -205,8 +205,7 @@ export class MangaStreamParser {
                     continue
                 }
                 for (const manga of $('div.bsx', $(source.homescreen_PopularToday_selector).parent().next()).toArray()) {
-                    const id = this.idCleaner($('a', manga).attr('href') ?? '')
-                    const title = $('a', manga).attr('title')
+                    const id = this.idCleaner($('a', manga).attr('href') ?? ''); const title = $('a', manga).attr('title')
                     const image = this.getImageSrc($('img', manga))?.split('?resize')[0] ?? ''
                     const subtitle = $('div.epxs', manga).text().trim()
                     if (!id || !title) continue

@@ -33,6 +33,8 @@ export class LuminousScansParser extends MangaStreamParser {
     
         if (mangaId.toUpperCase().endsWith('-RAW') && source.languageCode == 'gb') langCode = LanguageCode.KOREAN
 
+        // Reworked chapter number assignment due to cases where epilogue chapters labeled numerically
+        // ended up at the beginning of the chapter list (e.g. "Epilogue 01")
         const chapterNumberRegex = /(\d+\.?\d?)+/
         const rawChapters = $(source.chapter_selector_item, source.chapter_selector_box).toArray().reverse()
         let currentChapter = Number(rawChapters[0]?.attribs['data-num'].match(chapterNumberRegex)?.[1] ?? 0)
