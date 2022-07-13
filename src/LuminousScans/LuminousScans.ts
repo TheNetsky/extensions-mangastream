@@ -3,6 +3,7 @@ import {
     LanguageCode,
     SourceInfo,
     ContentRating,
+    TagType
 } from 'paperback-extensions-common'
 
 import { MangaStream,
@@ -21,6 +22,12 @@ export const LuminousScansInfo: SourceInfo = {
     icon: 'logo.png',
     contentRating: ContentRating.MATURE,
     websiteBaseURL: LUMINOUSSCANS_DOMAIN,
+    sourceTags: [
+        {
+            text: 'Notifications',
+            type: TagType.GREEN
+        }
+    ]
 }
 
 export class LuminousScans extends MangaStream {
