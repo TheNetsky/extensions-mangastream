@@ -1136,7 +1136,7 @@ exports.MangaStream = exports.getExportVersion = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStreamParser_1 = require("./MangaStreamParser");
 // Set the version for the base, changing this version will change the versions of all sources
-const BASE_VERSION = '2.1.3';
+const BASE_VERSION = '2.1.4';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1587,6 +1587,7 @@ class MangaStreamParser {
     parseChapterList($, mangaId, source) {
         var _a, _b;
         const chapters = [];
+        let sortingIndex = 0;
         let langCode = source.languageCode;
         if (mangaId.toUpperCase().endsWith('-RAW') && source.languageCode == 'gb')
             langCode = paperback_extensions_common_1.LanguageCode.KOREAN;
@@ -1608,7 +1609,10 @@ class MangaStreamParser {
                 langCode: langCode,
                 chapNum: chapterNumber,
                 time: date,
+                // @ts-ignore
+                sortingIndex
             }));
+            sortingIndex--;
         }
         return chapters;
     }
