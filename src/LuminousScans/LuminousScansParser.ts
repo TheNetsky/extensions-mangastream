@@ -25,40 +25,4 @@ export class LuminousScansParser extends MangaStreamParser {
         const tagSections: TagSection[] = [createTagSection({ id: '0', label: 'genres', tags: arrayTags.map(x => createTag(x)) })]
         return tagSections
     }
-
-    override parseChapterList($: CheerioSelector, mangaId: string, source: any): Chapter[] {
-        const chapters: Chapter[] = []
-    
-        let langCode = source.languageCode
-    
-        if (mangaId.toUpperCase().endsWith('-RAW') && source.languageCode == 'gb') langCode = LanguageCode.KOREAN
-
-        // Reworked chapter number assignment due to cases where epilogue chapters labeled numerically
-        // ended up at the beginning of the chapter list (e.g. "Epilogue 01")
-        const chapterNumberRegex = /(\d+\.?\d?)+/
-        const rawChapters = $(source.chapter_selector_item, source.chapter_selector_box).toArray().reverse()
-        let currentChapter = Number(rawChapters[0]?.attribs['data-num'].match(chapterNumberRegex)?.[1] ?? 0)
-        
-        for (const chapter of rawChapters) {
-            const title = $('span.chapternum', chapter).text().trim()
-            const id = this.idCleaner($('a', chapter).attr('href') ?? '')
-            const date = convertDate($('span.chapterdate', chapter).text().trim(), source)
-            //const getNumber = chapter.attribs['data-num'] ?? ''
-            //const chapterNumberRegex = getNumber.match(/(\d+\.?\d?)+/)
-            const chapterNumber = currentChapter++
-            //if (chapterNumberRegex && chapterNumberRegex[1]) chapterNumber = Number(chapterNumberRegex[1])
-    
-            if (!id) continue
-            chapters.push(createChapter({
-                id: id,
-                mangaId,
-                name: title,
-                langCode: langCode,
-                chapNum: chapterNumber,
-                time: date,
-            }))
-        }
-        return chapters
-    }
-    
 }
