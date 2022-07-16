@@ -1051,6 +1051,88 @@ exports.convertDateAgo = convertDateAgo;
 
 },{}],57:[function(require,module,exports){
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LuminousScans = exports.LuminousScansInfo = void 0;
+/* eslint-disable linebreak-style */
+const paperback_extensions_common_1 = require("paperback-extensions-common");
+const MangaStream_1 = require("../MangaStream");
+const LuminousScansParser_1 = require("./LuminousScansParser");
+const LUMINOUSSCANS_DOMAIN = 'https://luminousscans.com';
+exports.LuminousScansInfo = {
+    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
+    name: 'LuminousScans',
+    description: 'Extension that pulls manga from LuminousScans',
+    author: 'yehru',
+    authorWebsite: 'http://github.com/yehrupx',
+    icon: 'logo.png',
+    contentRating: paperback_extensions_common_1.ContentRating.MATURE,
+    websiteBaseURL: LUMINOUSSCANS_DOMAIN,
+    sourceTags: [
+        {
+            text: 'Notifications',
+            type: paperback_extensions_common_1.TagType.GREEN
+        }
+    ]
+};
+class LuminousScans extends MangaStream_1.MangaStream {
+    constructor() {
+        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
+        super(...arguments);
+        this.baseUrl = LUMINOUSSCANS_DOMAIN;
+        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
+        this.sourceTraversalPathName = 'series';
+        //----MANGA DETAILS SELECTORS
+        /*
+        If a website uses different names/words for the status below, change them to these.
+        These must also be changed id a different language is used!
+        Don't worry, these are case insensitive.
+        */
+        //manga_StatusTypes: object = {
+        //    ONGOING: "ongoing",
+        //    COMPLETED: "completed"
+        //}
+        //----HOMESCREEN SELECTORS
+        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
+        //Always be sure to test this in the app!
+        this.homescreen_PopularToday_enabled = true;
+        this.homescreen_LatestUpdate_enabled = true;
+        this.homescreen_NewManga_enabled = false;
+        this.homescreen_TopAllTime_enabled = true;
+        this.homescreen_TopMonthly_enabled = true;
+        this.homescreen_TopWeekly_enabled = true;
+        //----TAG SELECTORS
+        this.tags_SubdirectoryPathName = '/series/';
+        this.tags_selector_box = 'ul.genrez';
+        this.tags_selector_item = 'li';
+        this.tags_selector_label = 'label';
+        this.parser = new LuminousScansParser_1.LuminousScansParser();
+    }
+}
+exports.LuminousScans = LuminousScans;
+
+},{"../MangaStream":59,"./LuminousScansParser":58,"paperback-extensions-common":13}],58:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LuminousScansParser = void 0;
+const MangaStreamParser_1 = require("../MangaStreamParser");
+class LuminousScansParser extends MangaStreamParser_1.MangaStreamParser {
+    parseTags($, source) {
+        const arrayTags = [];
+        for (const tag of $(source.tags_selector_item, source.tags_selector_box).toArray()) {
+            const label = source.tags_selector_label ? $(source.tags_selector_label, tag).text().trim() : $(tag).text().trim();
+            const id = label.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/(\/|\s)/g, '-').trim();
+            if (!id || !label)
+                continue;
+            arrayTags.push({ id: id, label: label });
+        }
+        const tagSections = [createTagSection({ id: '0', label: 'genres', tags: arrayTags.map(x => createTag(x)) })];
+        return tagSections;
+    }
+}
+exports.LuminousScansParser = LuminousScansParser;
+
+},{"../MangaStreamParser":60}],59:[function(require,module,exports){
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1421,7 +1503,7 @@ class MangaStream extends paperback_extensions_common_1.Source {
 }
 exports.MangaStream = MangaStream;
 
-},{"./MangaStreamParser":58,"paperback-extensions-common":13}],58:[function(require,module,exports){
+},{"./MangaStreamParser":60,"paperback-extensions-common":13}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MangaStreamParser = void 0;
@@ -1807,129 +1889,5 @@ class MangaStreamParser {
 }
 exports.MangaStreamParser = MangaStreamParser;
 
-},{"./LanguageUtils":56,"entities":9,"paperback-extensions-common":13}],59:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ManhwaX = exports.ManhwaXInfo = void 0;
-/* eslint-disable linebreak-style */
-const paperback_extensions_common_1 = require("paperback-extensions-common");
-const MangaStream_1 = require("../MangaStream");
-const ManhwaXParser_1 = require("./ManhwaXParser");
-const MANHWAX_DOMAIN = 'https://manhwax.com';
-exports.ManhwaXInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
-    name: 'ManhwaX',
-    description: 'Extension that pulls manga from ManhwaX',
-    author: 'Netsky',
-    authorWebsite: 'http://github.com/TheNetsky',
-    icon: 'icon.png',
-    contentRating: paperback_extensions_common_1.ContentRating.ADULT,
-    websiteBaseURL: MANHWAX_DOMAIN,
-    sourceTags: [
-        {
-            text: 'Notifications',
-            type: paperback_extensions_common_1.TagType.GREEN
-        },
-        {
-            text: '18+',
-            type: paperback_extensions_common_1.TagType.YELLOW
-        }
-    ]
-};
-class ManhwaX extends MangaStream_1.MangaStream {
-    constructor() {
-        //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
-        super(...arguments);
-        this.baseUrl = MANHWAX_DOMAIN;
-        this.languageCode = paperback_extensions_common_1.LanguageCode.ENGLISH;
-        this.parser = new ManhwaXParser_1.ManhwaXParser();
-        //----MANGA DETAILS SELECTORS
-        /*
-        If a website uses different names/words for the status below, change them to these.
-        These must also be changed id a different language is used!
-        Don't worry, these are case insensitive.
-        */
-        //manga_StatusTypes: object = { 
-        //    ONGOING: "ongoing",
-        //    COMPLETED: "completed"
-        //}
-        //----HOMESCREEN SELECTORS
-        //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
-        //Always be sure to test this in the app!
-        this.homescreen_PopularToday_enabled = false;
-        this.homescreen_LatestUpdate_enabled = true;
-        this.homescreen_LatestUpdate_selector_item = 'div.bsx';
-        this.homescreen_NewManga_enabled = false;
-        this.homescreen_TopAllTime_enabled = true;
-        this.homescreen_TopMonthly_enabled = true;
-        this.homescreen_TopWeekly_enabled = true;
-        /*
-        ----TAG SELECTORS
-        PRESET 1 (default): Genres are on homepage ex. https://mangagenki.com/
-        tags_SubdirectoryPathName: string = ""
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = ""
-    
-        PRESET 2: with /genre/ subdirectory ex. https://mangadark.com/genres/
-        tags_SubdirectoryPathName: string = "/genres/"
-        tags_selector_box: string = "ul.genre"
-        tags_selector_item: string = "li"
-        tags_selector_label: string = "span"
-        */
-        this.tags_SubdirectoryPathName = '';
-        this.tags_selector_box = 'ul.genre';
-        this.tags_selector_item = 'li';
-        this.tags_selector_label = '';
-    }
-}
-exports.ManhwaX = ManhwaX;
-
-},{"../MangaStream":57,"./ManhwaXParser":60,"paperback-extensions-common":13}],60:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ManhwaXParser = void 0;
-/* eslint-disable linebreak-style */
-const MangaStreamParser_1 = require("../MangaStreamParser");
-const LanguageUtils_1 = require("../LanguageUtils");
-class ManhwaXParser extends MangaStreamParser_1.MangaStreamParser {
-    parseUpdatedManga($, time, ids, source) {
-        var _a, _b, _c;
-        const updatedManga = [];
-        let loadMore = true;
-        const isLast = this.isLastPage($, 'view_more'); //Check if it's the last page or not, needed for some sites!
-        if (!$(source.homescreen_LatestUpdate_selector_item, (_b = (_a = $(source.homescreen_LatestUpdate_selector_box)) === null || _a === void 0 ? void 0 : _a.parent()) === null || _b === void 0 ? void 0 : _b.next()).length)
-            throw new Error('Unable to parse valid update section!');
-        for (const manga of $(source.homescreen_LatestUpdate_selector_item, $(source.homescreen_LatestUpdate_selector_box).parent().next()).toArray()) {
-            const id = this.idCleaner((_c = $('a', manga).attr('href')) !== null && _c !== void 0 ? _c : '');
-            const mangaDate = (0, LanguageUtils_1.convertDateAgo)($('div.epxdate', $('div.adds', manga)).first().text().trim(), source);
-            //Check if manga time is older than the time provided, is this manga has an update. Return this.
-            if (!id)
-                continue;
-            if (mangaDate > time) {
-                if (ids.includes(id)) {
-                    updatedManga.push(id);
-                }
-                // If there is an id but no mangadate, this means the site forgot to list the chapters on the front page. However this doesn't mean our search is over! (rare)
-            }
-            else if (id && mangaDate == null) {
-                loadMore = true;
-                // If the latest mangaDate isn't older than our current time, we're done!
-            }
-            else {
-                loadMore = false;
-            }
-            //If the site does not have any more pages, we're done!
-            if (isLast)
-                loadMore = false;
-        }
-        return {
-            ids: updatedManga,
-            loadMore,
-        };
-    }
-}
-exports.ManhwaXParser = ManhwaXParser;
-
-},{"../LanguageUtils":56,"../MangaStreamParser":58}]},{},[59])(59)
+},{"./LanguageUtils":56,"entities":9,"paperback-extensions-common":13}]},{},[57])(57)
 });

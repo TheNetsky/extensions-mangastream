@@ -1471,7 +1471,7 @@ class MangaStreamParser {
         var _a, _b;
         const titles = [];
         titles.push(this.decodeHTMLEntity($('h1.entry-title').text().trim()));
-        const altTitles = $(`span:contains(${source.manga_selector_AlternativeTitles}), b:contains(${source.manga_selector_AlternativeTitles})+span, .imptdt:contains(${source.manga_selector_AlternativeTitles}) i`).contents().remove().last().text().split(','); //Language dependant
+        const altTitles = $(`span:contains(${source.manga_selector_AlternativeTitles}), b:contains(${source.manga_selector_AlternativeTitles})+span, .imptdt:contains(${source.manga_selector_AlternativeTitles}) i, h1.entry-title+span`).contents().remove().last().text().split(','); //Language dependant
         for (const title of altTitles) {
             if (title == '')
                 continue;
@@ -1887,7 +1887,7 @@ class SushiScan extends MangaStream_1.MangaStream {
          * Default =  English Translation
          */
         this.dateTimeAgo = {
-            now: ['moins d’une heure', "tout à l'heure", "moment", "maintenant"],
+            now: ['moins d’une heure', 'tout à l\'heure', 'moment', 'maintenant'],
             yesterday: ['hier'],
             years: ['an'],
             months: ['mois'],
@@ -1901,7 +1901,7 @@ class SushiScan extends MangaStream_1.MangaStream {
         //Disabling some of these will cause some Home-Page tests to fail, edit these test files to match the setting.
         //Always be sure to test this in the app!
         this.homescreen_PopularToday_enabled = true;
-        this.homescreen_PopularToday_selector = "h2:contains(Populaire Aujourd'hui)";
+        this.homescreen_PopularToday_selector = 'h2:contains(Populaire Aujourd\'hui)';
         this.homescreen_LatestUpdate_enabled = true;
         this.homescreen_LatestUpdate_selector_box = 'h2:contains(Dernières Sorties)';
         this.homescreen_LatestUpdate_selector_item = 'div.bsx';

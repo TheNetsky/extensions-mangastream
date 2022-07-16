@@ -1532,7 +1532,7 @@ class MangaStreamParser {
         var _a, _b;
         const titles = [];
         titles.push(this.decodeHTMLEntity($('h1.entry-title').text().trim()));
-        const altTitles = $(`span:contains(${source.manga_selector_AlternativeTitles}), b:contains(${source.manga_selector_AlternativeTitles})+span, .imptdt:contains(${source.manga_selector_AlternativeTitles}) i`).contents().remove().last().text().split(','); //Language dependant
+        const altTitles = $(`span:contains(${source.manga_selector_AlternativeTitles}), b:contains(${source.manga_selector_AlternativeTitles})+span, .imptdt:contains(${source.manga_selector_AlternativeTitles}) i, h1.entry-title+span`).contents().remove().last().text().split(','); //Language dependant
         for (const title of altTitles) {
             if (title == '')
                 continue;
