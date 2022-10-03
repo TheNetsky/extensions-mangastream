@@ -986,9 +986,9 @@ exports.AsuraScans = exports.AsuraScansInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
 const AsuraScansParser_1 = require("./AsuraScansParser");
-const ASURASCANS_DOMAIN = 'https://www.asurascans.com';
+const ASURASCANS_DOMAIN = 'https://asura.gg';
 exports.AsuraScansInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.5'),
+    version: (0, MangaStream_1.getExportVersion)('0.0.6'),
     name: 'AsuraScans',
     description: 'Extension that pulls manga from AsuraScans',
     author: 'Netsky',
