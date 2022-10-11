@@ -1137,7 +1137,7 @@ exports.MangaStream = exports.getExportVersion = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStreamParser_1 = require("./MangaStreamParser");
 // Set the version for the base, changing this version will change the versions of all sources
-const BASE_VERSION = '2.1.4';
+const BASE_VERSION = '2.1.5';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1584,7 +1584,7 @@ class MangaStreamParser {
                 chapterNumber = Number(chapterNumberRegex[1]);
             if (!id)
                 continue;
-            chapters.push(createChapter({
+            chapters.push({
                 id: id,
                 mangaId,
                 name: title,
@@ -1593,10 +1593,14 @@ class MangaStreamParser {
                 time: date,
                 // @ts-ignore
                 sortingIndex
-            }));
+            });
             sortingIndex--;
         }
-        return chapters;
+        return chapters.map(chapter => {
+            // @ts-ignore
+            chapter.sortingIndex += chapters.length;
+            return createChapter(chapter);
+        });
     }
     parseChapterDetails($, mangaId, chapterId) {
         const data = $.html();
