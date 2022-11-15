@@ -10,9 +10,9 @@ import { MangaStream, getExportVersion } from "../MangaStream";
 
 import { KiryuuParser } from "./KiryuuParser";
 
-const KIRYUU_DOMAIN = "https://asura.gg";
+const KIRYUU_DOMAIN = "https://kiryuu.id";
 
-export const AsuraScansInfo: SourceInfo = {
+export const KiryuuInfo: SourceInfo = {
   version: getExportVersion("0.0.6"),
   name: "Kiryuu",
   description: "Extension that pulls manga from Kiryuu",
@@ -27,12 +27,8 @@ export const AsuraScansInfo: SourceInfo = {
       type: TagType.GREEN,
     },
     {
-      text: "CloudFlare",
-      type: TagType.RED,
-    },
-    {
-      text: "Buggy",
-      type: TagType.RED,
+      text: "Indonesian",
+      type: TagType.GREY,
     },
   ],
 };
@@ -41,7 +37,7 @@ export class Kiryuu extends MangaStream {
   //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
 
   baseUrl: string = KIRYUU_DOMAIN;
-  languageCode: LanguageCode = LanguageCode.ENGLISH;
+  languageCode: LanguageCode = LanguageCode.INDONESIAN;
 
   override readonly parser: KiryuuParser = new KiryuuParser();
 
@@ -51,6 +47,32 @@ export class Kiryuu extends MangaStream {
     requestsPerSecond: 2,
     requestTimeout: 15000,
   });
+
+  override dateMonths = {
+    january: "januari",
+    february: "februari",
+    march: "maret",
+    april: "april",
+    may: "mei",
+    june: "juni",
+    july: "juli",
+    august: "agustus",
+    september: "september",
+    october: "oktober",
+    november: "november",
+    december: "desember",
+  };
+  override dateTimeAgo = {
+    now: ["detik lalu"],
+    yesterday: ["kemarin"],
+    years: ["tahun"],
+    months: ["bulan"],
+    weeks: ["minggu"],
+    days: ["hari"],
+    hours: ["jam"],
+    minutes: ["menit"],
+    seconds: ["detik"],
+  };
 
   //----MANGA DETAILS SELECTORS
   /*
@@ -69,14 +91,18 @@ export class Kiryuu extends MangaStream {
   //Always be sure to test this in the app!
 
   override homescreen_PopularToday_enabled = true;
+  override homescreen_PopularToday_selector =
+    "h2:contains(Terpopuler Hari Ini)";
 
   override homescreen_LatestUpdate_enabled = true;
+  override homescreen_LatestUpdate_selector_box = "h2:contains(Project Update)";
 
   override homescreen_NewManga_enabled = false;
+  override homescreen_NewManga_selector = "h2:contains(Rilisan Terbaru)";
 
-  override homescreen_TopAllTime_enabled = true;
-  override homescreen_TopMonthly_enabled = true;
-  override homescreen_TopWeekly_enabled = true;
+  override homescreen_TopAllTime_enabled = false;
+  override homescreen_TopMonthly_enabled = false;
+  override homescreen_TopWeekly_enabled = false;
 
   /*
     ----TAG SELECTORS
@@ -92,4 +118,9 @@ export class Kiryuu extends MangaStream {
     tags_selector_item: string = "li"
     tags_selector_label: string = "span"
     */
+
+  override manga_tag_selector_box = ".seriestugenre";
+  override manga_selector_author = "td:contains(Author)+td";
+  override manga_selector_artist = "td:contains(Artist)+td";
+  override manga_selector_status = "td:contains(status)+td";
 }
