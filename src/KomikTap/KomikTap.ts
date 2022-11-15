@@ -19,7 +19,7 @@ export const KomikTapInfo: SourceInfo = {
   author: "NaufalJCT48",
   authorWebsite: "http://github.com/naufaljct48",
   icon: "icon.png",
-  contentRating: ContentRating.MATURE,
+  contentRating: ContentRating.ADULT,
   websiteBaseURL: KOMIKTAP_DOMAIN,
   sourceTags: [
     {
