@@ -8,7 +8,7 @@ import {
   TagSection,
 } from "paperback-extensions-common";
 
-export class KiryuuParser extends MangaStreamParser {
+export class KomikTapParser extends MangaStreamParser {
   override parseChapterDetails(
     $: CheerioStatic,
     mangaId: string,
@@ -58,7 +58,7 @@ export class KiryuuParser extends MangaStreamParser {
     const titles = [];
     titles.push(
       this.decodeHTMLEntity(
-        $("h1.entry-title").text().replace("Bahasa Indonesia", "").trim()
+        $("h1.entry-title").text().replace("Komik ", "").trim()
       )
     );
 

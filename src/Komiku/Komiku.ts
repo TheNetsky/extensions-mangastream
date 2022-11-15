@@ -8,19 +8,19 @@ import {
 
 import { MangaStream, getExportVersion } from "../MangaStream";
 
-import { KiryuuParser } from "./KiryuuParser";
+import { KomikuParser } from "./KomikuParser";
 
-const KIRYUU_DOMAIN = "https://kiryuu.id";
+const KOMIKU_DOMAIN = "https://komiku.com";
 
-export const KiryuuInfo: SourceInfo = {
+export const KomikuInfo: SourceInfo = {
   version: getExportVersion("0.0.6"),
-  name: "Kiryuu",
-  description: "Extension that pulls manga from Kiryuu",
+  name: "Komiku.com",
+  description: "Extension that pulls manga from Komiku.com",
   author: "NaufalJCT48",
   authorWebsite: "http://github.com/naufaljct48",
   icon: "icon.png",
   contentRating: ContentRating.MATURE,
-  websiteBaseURL: KIRYUU_DOMAIN,
+  websiteBaseURL: KOMIKU_DOMAIN,
   sourceTags: [
     {
       text: "Notifications",
@@ -33,13 +33,13 @@ export const KiryuuInfo: SourceInfo = {
   ],
 };
 
-export class Kiryuu extends MangaStream {
+export class Komiku extends MangaStream {
   //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
 
-  baseUrl: string = KIRYUU_DOMAIN;
+  baseUrl: string = KOMIKU_DOMAIN;
   languageCode: LanguageCode = LanguageCode.INDONESIAN;
 
-  override readonly parser: KiryuuParser = new KiryuuParser();
+  override readonly parser: KomikuParser = new KomikuParser();
 
   override sourceTraversalPathName = "manga";
 
@@ -92,13 +92,13 @@ export class Kiryuu extends MangaStream {
 
   override homescreen_PopularToday_enabled = true;
   override homescreen_PopularToday_selector =
-    "h2:contains(Terpopuler Hari Ini)";
+    "h2:contains(Baca Komik Terpopuler Hari Ini Online)";
 
   override homescreen_LatestUpdate_enabled = true;
-  override homescreen_LatestUpdate_selector_box = "h2:contains(Project Update)";
+  override homescreen_LatestUpdate_selector_box =
+    "h2:contains(Baca Komik Terbaru Online)";
 
   override homescreen_NewManga_enabled = false;
-  override homescreen_NewManga_selector = "h2:contains(Rilisan Terbaru)";
 
   override homescreen_TopAllTime_enabled = false;
   override homescreen_TopMonthly_enabled = false;

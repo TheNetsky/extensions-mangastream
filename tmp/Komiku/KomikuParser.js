@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KiryuuParser = void 0;
+exports.KomikuParser = void 0;
 /* eslint-disable linebreak-style */
 const MangaStreamParser_1 = require("../MangaStreamParser");
 const paperback_extensions_common_1 = require("paperback-extensions-common");
-class KiryuuParser extends MangaStreamParser_1.MangaStreamParser {
+class KomikuParser extends MangaStreamParser_1.MangaStreamParser {
     parseChapterDetails($, mangaId, chapterId) {
         const data = $.html();
         const pages = [];
@@ -37,7 +37,7 @@ class KiryuuParser extends MangaStreamParser_1.MangaStreamParser {
     }
     parseMangaDetails($, mangaId, source) {
         const titles = [];
-        titles.push(this.decodeHTMLEntity($("h1.entry-title").text().replace("Bahasa Indonesia", "").trim()));
+        titles.push(this.decodeHTMLEntity($("h1.entry-title").text().replace("Komik ", "").trim()));
         const altTitles = $(`span:contains(${source.manga_selector_AlternativeTitles}), b:contains(${source.manga_selector_AlternativeTitles})+span, .imptdt:contains(${source.manga_selector_AlternativeTitles}) i, h1.entry-title+span`)
             .contents()
             .remove()
@@ -101,4 +101,4 @@ class KiryuuParser extends MangaStreamParser_1.MangaStreamParser {
         });
     }
 }
-exports.KiryuuParser = KiryuuParser;
+exports.KomikuParser = KomikuParser;

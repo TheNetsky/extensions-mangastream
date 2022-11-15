@@ -8,19 +8,19 @@ import {
 
 import { MangaStream, getExportVersion } from "../MangaStream";
 
-import { KiryuuParser } from "./KiryuuParser";
+import { KomikTapParser } from "./KomikTapParser";
 
-const KIRYUU_DOMAIN = "https://kiryuu.id";
+const KOMIKTAP_DOMAIN = "https://194.233.66.232";
 
-export const KiryuuInfo: SourceInfo = {
+export const KomikTapInfo: SourceInfo = {
   version: getExportVersion("0.0.6"),
-  name: "Kiryuu",
-  description: "Extension that pulls manga from Kiryuu",
+  name: "KomikTap",
+  description: "Extension that pulls manga from KomikTap",
   author: "NaufalJCT48",
   authorWebsite: "http://github.com/naufaljct48",
   icon: "icon.png",
   contentRating: ContentRating.MATURE,
-  websiteBaseURL: KIRYUU_DOMAIN,
+  websiteBaseURL: KOMIKTAP_DOMAIN,
   sourceTags: [
     {
       text: "Notifications",
@@ -30,16 +30,20 @@ export const KiryuuInfo: SourceInfo = {
       text: "Indonesian",
       type: TagType.GREY,
     },
+    {
+      text: "18+",
+      type: TagType.YELLOW,
+    },
   ],
 };
 
-export class Kiryuu extends MangaStream {
+export class KomikTap extends MangaStream {
   //FOR ALL THE SELECTIONS, PLEASE CHECK THE MangaSteam.ts FILE!!!
 
-  baseUrl: string = KIRYUU_DOMAIN;
+  baseUrl: string = KOMIKTAP_DOMAIN;
   languageCode: LanguageCode = LanguageCode.INDONESIAN;
 
-  override readonly parser: KiryuuParser = new KiryuuParser();
+  override readonly parser: KomikTapParser = new KomikTapParser();
 
   override sourceTraversalPathName = "manga";
 
@@ -91,14 +95,12 @@ export class Kiryuu extends MangaStream {
   //Always be sure to test this in the app!
 
   override homescreen_PopularToday_enabled = true;
-  override homescreen_PopularToday_selector =
-    "h2:contains(Terpopuler Hari Ini)";
+  override homescreen_PopularToday_selector = "h2:contains(Popular Today)";
 
   override homescreen_LatestUpdate_enabled = true;
-  override homescreen_LatestUpdate_selector_box = "h2:contains(Project Update)";
+  override homescreen_LatestUpdate_selector_box = "h2:contains(Latest Update)";
 
   override homescreen_NewManga_enabled = false;
-  override homescreen_NewManga_selector = "h2:contains(Rilisan Terbaru)";
 
   override homescreen_TopAllTime_enabled = false;
   override homescreen_TopMonthly_enabled = false;
