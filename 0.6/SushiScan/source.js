@@ -1796,9 +1796,9 @@ exports.SushiScan = exports.SushiScanInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaStream_1 = require("../MangaStream");
 const SushiScanParser_1 = require("./SushiScanParser");
-const SUSHI_SCAN_DOMAIN = 'https://sushiscan.su';
+const SUSHI_SCAN_DOMAIN = 'https://sushiscan.net';
 exports.SushiScanInfo = {
-    version: (0, MangaStream_1.getExportVersion)('0.0.0'),
+    version: (0, MangaStream_1.getExportVersion)('0.0.1'),
     name: 'Sushi Scan',
     description: 'Extension that pulls manga from sushiscan.su',
     author: 'btylerh7',
